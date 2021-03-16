@@ -1,0 +1,7 @@
+[submodule "contiki-ng"]
+	path = contiki-ng
+	url = https://github.com/lutgaru/contiki-ng
+	branch = experimental
+[submodule "libcoap"]
+	path = libcoap
+	url = https://github.com/obgm/libcoap
