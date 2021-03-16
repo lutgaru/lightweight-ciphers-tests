@@ -1,0 +1,51 @@
+:name: cc2538 range medium 2 nodes
+
+######################################################################
+#
+# Sample script creating 1 server node and 1 client node using a
+# range-based medium function - transmission is possible if nodes are
+# in range. Nodes are positioned in a 3D space (x,y,z),
+# at a distance of 10 (units) from each other (on the X axis).
+#
+# Differences in SyncUnit values in machines represent the differences
+# in their relative speed. This prevents the machines from
+# synchronizing in 100%, which is crucial for Contiki network stack
+# stability.
+#
+######################################################################
+
+#path add $CWD
+emulation CreateWirelessMedium "wireless"
+#$domain = `emulation AddSyncDomain`
+#wireless SetSyncDomainFromEmulation $domain
+#wireless SetRangeWirelessFunction 11
+
+# The radio is using a range-based medium (with the `Range` set to `11`)
+# If not set, the default SimpleMediumFunction will be used (where range is not relevant)
+wireless SetRangeWirelessFunction 11
+
+######################### COAP SERVER - begin #########################
+$bin=@coap-example-server/coap-example-server.cc2538dk
+$name="server"
+i $ORIGIN/cc2538-node.resc
+connector Connect radio wireless
+wireless SetPosition radio 0 0 0
+logLevel 3
+sysbus.uart0 CreateFileBackend @/home/neft/tesistests/contiki-ng/examples/coap/serverloguart.dat
+#machine SyncUnit 100
+showAnalyzer sysbus.uart0
+mach clear
+########################## UDP SERVER - end ##########################
+
+######################### COAP CLIENT - begin #########################
+$bin=@coap-example-client/coap-example-client.cc2538dk
+$name="client"
+i $ORIGIN/cc2538-node.resc
+connector Connect radio wireless
+wireless SetPosition radio 1 0 0
+logLevel 3
+sysbus.uart0 CreateFileBackend @/home/neft/tesistests/contiki-ng/examples/coap/clientloguart.dat
+showAnalyzer sysbus.uart0
+mach clear
+########################## UDP CLIENT - end ##########################
+start
