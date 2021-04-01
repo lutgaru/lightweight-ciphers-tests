@@ -23,13 +23,14 @@ emulation CreateWirelessMedium "wireless"
 # The radio is using a range-based medium (with the `Range` set to `11`)
 # If not set, the default SimpleMediumFunction will be used (where range is not relevant)
 wireless SetRangeWirelessFunction 11
-emulation LogWirelessTraffic
+#emulation LogWirelessTraffic
 ######################### COAP SERVER - begin #########################
 $bin=@contiki-ng/examples/coap/coap-example-server/coap-example-server.cc2538dk
 $name="server"
 i $ORIGIN/cc2538-node.resc
 connector Connect radio wireless
-wireless SetPosition radio 0 0 0
+wireless SetPosition radio 27 0 0
+#logLevel -1
 logLevel 3
 #sysbus.uart0 CreateFileBackend @/home/neft/tesistests/contiki-ng/examples/coap/serverloguart.dat
 #machine SyncUnit 100
@@ -37,16 +38,46 @@ logLevel 3
 mach clear
 ########################## UDP SERVER - end ##########################
 
+######################### COAP SERVER2 - begin #########################
+$bin=@contiki-ng/examples/coap/coap-example-server/coap-example-server.cc2538dk
+$name="server2"
+i $ORIGIN/cc2538-node.resc
+connector Connect radio wireless
+wireless SetPosition radio 18 0 0
+#logLevel -1
+logLevel 3
+#sysbus.uart0 CreateFileBackend @/home/neft/tesistests/contiki-ng/examples/coap/serverloguart.dat
+#machine SyncUnit 100
+#showAnalyzer sysbus.uart0
+mach clear
+########################## UDP SERVER2 - end ##########################
+
+######################### COAP SERVER3 - begin #########################
+$bin=@contiki-ng/examples/coap/coap-example-server/coap-example-server.cc2538dk
+$name="server3"
+i $ORIGIN/cc2538-node.resc
+connector Connect radio wireless
+wireless SetPosition radio 9 0 0
+#logLevel -1
+logLevel 3
+#sysbus.uart0 CreateFileBackend @/home/neft/tesistests/contiki-ng/examples/coap/serverloguart.dat
+#machine SyncUnit 100
+#showAnalyzer sysbus.uart0
+mach clear
+########################## UDP SERVER3 - end ##########################
+
 ######################### COAP CLIENT - begin #########################
 $bin=@contiki-ng/examples/coap/coap-example-client/coap-example-client.cc2538dk
 $name="client"
 i $ORIGIN/cc2538-node.resc
 connector Connect radio wireless
-wireless SetPosition radio 1 0 0
+wireless SetPosition radio 0 0 0
 logLevel 3
-sysbus.uart0 CreateFileBackend @/home/neft/lightweight-ciphers-tests/clientloguart.dat
+sysbus.uart0 CreateFileBackend @/home/neft/tesistests/contiki-ng/examples/coap/clientloguart.dat
 showAnalyzer sysbus.uart0
+#machine StartGdbServer 3333
 mach clear
 ########################## UDP CLIENT - end ##########################
 emulation SetGlobalAdvanceImmediately True
+emulation SetGlobalQuantum "0.000005"
 start

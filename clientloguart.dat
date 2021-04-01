@@ -1,0 +1,82 @@
+[INFO: Main      ] Starting Contiki-NG-release/v4.6-65-g4d954141f-dirty
+[INFO: Main      ] - Routing: RPL Lite
+[INFO: Main      ] - Net: sicslowpan
+[INFO: Main      ] - MAC: CSMA
+[INFO: Main      ] - 802.15.4 PANID: 0xabcd
+[INFO: Main      ] - 802.15.4 Default channel: 26
+[INFO: Main      ] Node ID: 49154
+[INFO: Main      ] Lin[INFO: Main      ] Starting Contiki-NG-release/v4.6-65-g4d954141f-dirty
+[INFO: Main      ] - Routing: RPL Lite
+[INFO: Main      ] - Net: sicslowpan
+[INFO: Main      ] - MAC: CSMA
+[INFO: Main      ] - 802.15.4 PANID: 0xabcd
+[INFO: Main      ] - 802.15.4 Default channel: 26
+[INFO: Main      ] Node ID: 49154
+[INFO: Main      ] Link-layer address: 0012.4b00.0790.c002
+[INFO: Main      ] Tentative link-local IPv6 address: fe80::212:4b00:790:c002
+[INFO: CC26xx/CC13xx] TI CC2650 SensorTag
+[INFO: CC26xx/CC13xx]  RF: Channel 26, PANID 0xABCD
+Started DTLS retransmit process
+inicio:19504
+Press a button to request /test/hello
+[INFO: App       ] alcanzable
+htinit:549258
+dtls_new_peer: [FD00:0000:0000:0000:0212:4B00:0A55:DD05]:5684
+DTLSv12: initialize HASH_SHA256
+clear MAC
+send handshake packet of type: client_hello (1)
+fd00::212:4b00:a55:dd05dtls_handle_message: FOUND PEER
+got packet 22 (44 bytes)
+received handshake packet of type: hello_verify_request (3)
+handle handshake packet of type: hello_verify_request (3)
+clear MAC
+send handshake packet of type: client_hello (1)
+dtls_handle_message: FOUND PEER
+got packet 22 (63 bytes)
+new packet arrived with seq_nr: 1
+new bitfield is               : ffffffffffffffff
+received handshake packet of type: server_hello (2)
+handle handshake packet of type: server_hello (2)
+dtls_handle_message: FOUND PEER
+got packet 22 (25 bytes)
+new packet arrived with seq_nr: 2
+new bitfield is               : ffffffffffffffff
+received handshake packet of type: server_hello_done (14)
+handle handshake packet of type: server_hello_done (14)
+send handshake packet of type: client_key_exchange (16)
+key_block (40 bytes):
+send handshake packet of type: finished (20)
+dtls_prepare_record(): encrypt using TLS_PSK_WITH_AES_128_CCM_8
+encrypt1 568366
+encrypt2 568472
+dtls_handle_message: FOUND PEER
+got packet 20 (14 bytes)
+new packet arrived with seq_nr: 3
+new bitfield is               : ffffffffffffffff
+dtls_handle_message: FOUND PEER
+got packet 22 (53 bytes)
+decrypt1 579468
+decrypt2 579574
+decrypt_verify(): found 24 bytes cleartext
+received handshake packet of type: finished (20)
+handle handshake packet of type: finished (20)
+Handshake complete
+htfin:580660
+seguro:580742
+second: 65536
+1
+--Toggle timer--
+coaps://[fd00::212:4b00:a55:dd05]:5684
+dtls_prepare_record(): encrypt using TLS_PSK_WITH_AES_128_CCM_8
+encrypt1 581620
+encrypt2 581726
+dtls_handle_message: FOUND PEER
+got packet 23 (49 bytes)
+decrypt1 585452
+decrypt2 585556
+decrypt_verify(): found 20 bytes cleartext
+new packet arrived with seq_nr: 1
+new bitfield is               : ffffffffffffffff
+** application data:
+|Hello World!
+--Done--

@@ -4,6 +4,7 @@ trap "kill 0" EXIT
 compile()
 {
 make clean TARGET=cc2538dk
+#make clean TARGET=cc26x0-cc13x0
 case "$1" in
     1)
         make TARGET=cc2538dk WERROR=0 MAKE_WITH_GIFTCOFB=1 MAKE_WITH_DTLS=1 MAKE_COAP_DTLS_KEYSTORE=MAKE_COAP_DTLS_KEYSTORE_SIMPLE
@@ -42,16 +43,17 @@ case "$1" in
         ;;
     *)
         make TARGET=cc2538dk WERROR=0 MAKE_WITH_DTLS=1 MAKE_COAP_DTLS_KEYSTORE=MAKE_COAP_DTLS_KEYSTORE_SIMPLE
+        #make TARGET=cc26x0-cc13x0 BOARD=sensortag/cc2650 WERROR=0 MAKE_WITH_DTLS=1 MAKE_COAP_DTLS_KEYSTORE=MAKE_COAP_DTLS_KEYSTORE_SIMPLE
         ;;
 esac
 }
-serverdir=coap-example-server
-clientdir=coap-example-client
+serverdir=contiki-ng/examples/coap/coap-example-server
+clientdir=contiki-ng/examples/coap/coap-example-client
 cd $clientdir
 compile $1 $2 
-cd ..
+cd ../../../../
 cd $serverdir
 compile $1 $2 
-cd ..
+cd ../../../../
 
-renode coap_test.resc
+renode coap_test_3_saltos.resc
