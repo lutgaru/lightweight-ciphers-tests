@@ -39,13 +39,13 @@ class sensortag:
     
     def run(self,program=1):
         if(program):
-            exito1=os.system("/opt/ti/uniflash/dslite.sh -c CC2650F128.ccxml -f contiki-ng/examples/coap/coap-example-client/build/cc26x0-cc13x0/sensortag/cc2650/coap-example-client.hex")
-            exito2=os.system("/opt/ti/uniflash/dslite.sh -c CC2650F1282.ccxml -f contiki-ng/examples/coap/coap-example-server/build/cc26x0-cc13x0/sensortag/cc2650/coap-example-server.hex")
+            exito1=os.system("/opt/ti/uniflash/dslite.sh -c cliente.ccxml -f contiki-ng/examples/coap/coap-example-client/build/cc26x0-cc13x0/sensortag/cc2650/coap-example-client.hex")
+            exito2=os.system("/opt/ti/uniflash/dslite.sh -c server.ccxml -f contiki-ng/examples/coap/coap-example-server/build/cc26x0-cc13x0/sensortag/cc2650/coap-example-server.hex")
             if (exito1!=0 or exito2!=0):
                 return -1
         time.sleep(0.2)
-        resc="/opt/ti/uniflash/dslite.sh -c CC2650F128.ccxml --post-flash-device-cmd PinReset"
-        ress="/opt/ti/uniflash/dslite.sh -c CC2650F1282.ccxml --post-flash-device-cmd PinReset"
+        resc="/opt/ti/uniflash/dslite.sh -c cliente.ccxml --post-flash-device-cmd PinReset"
+        ress="/opt/ti/uniflash/dslite.sh -c server.ccxml --post-flash-device-cmd PinReset"
         clientthread=threading.Thread(target=self.threaduart,args=("/dev/ttyACM0","clientloguart.dat",45,resc,))#,daemon=True)
         serverthread=threading.Thread(target=self.threaduart,args=("/dev/ttyACM2","serverloguart.dat",45,ress,))#,daemon=True)
         print("= "*80)

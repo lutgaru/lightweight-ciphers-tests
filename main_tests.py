@@ -20,8 +20,8 @@ data_result_dir='/data_results'
 coap_dir='/examples/coap'
 clientloguart='clientloguart.dat'
 serverloguart='serverloguart.dat'
-secure_link_times = 'securelinktiming1_tag_1.dat'
-secure_link_timesht = 'securelinktiminght1_tag_1.dat'
+secure_link_times = 'securelinktiming1_tag_3.dat'
+secure_link_timesht = 'securelinktiminght1_tag_3.dat'
 ciphers=['AES',' GIFTCOFB',' XOODYAK',' ASCON128A',' ASCON80',' ASCON128',' GRAIN128',' TINYJAMBU192',' TINYJAMBU256',' TINYJAMBU128']
 textvs=[]
 datavs=[]
@@ -181,6 +181,7 @@ def testimagessize(platform_type=RENODE):
         #hexvs=sizesback[4,:]
     else:
         os.chdir(dir_path+"/contiki-ng/examples/coap/coap-example-client")
+        print(dir_path+"/contiki-ng/examples/coap/coap-example-client")
         for x in range(10):
             compileimage(x,platform)
             appendsize(platform)
@@ -235,7 +236,7 @@ def testvelocitycipher(platform_type=RENODE):
         #ciphertimerdifsdecrypt=velenback.items()
         #hexvs=sizesback[4,:]
     else:
-        for x in range(10):
+        for x in range(100):
             ###############compile images##################
             os.chdir(dir_path+"/contiki-ng/examples/coap/coap-example-client")
             compileimage(x,platform)
@@ -330,7 +331,7 @@ def test_secure_link(platform_type=RENODE):
             rtimer=[]
             rtimerht=[]
             platform.run()
-            for ren in range(5):
+            for ren in range(100):
                 ###############extract values from log files##################
                 time.sleep(1)
                 #----------------client----------------#
@@ -401,7 +402,7 @@ if __name__ == "__main__":
     #np.save(velencrypt,ciphertimerdifsencrypt)
     #testvelocitycipher()
     test_secure_link(SENSORTAG)
-    #testimagessize(SENSORTAG)
+    #testimagessize(COOJA)
     # platform=sensortag.sensortag()
     # os.chdir(dir_path+"/contiki-ng/examples/coap/coap-example-client")
     # compileimage(AES,platform,clean=0)
