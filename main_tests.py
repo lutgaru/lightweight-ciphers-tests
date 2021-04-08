@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from telnetlib import Telnet
 import time
+from datetime import datetime
 import random
 import csv
 import sensortag
@@ -12,6 +13,7 @@ import cooja
 
 AES, GIFTCOFB, XOODYAK, ASCON128A, ASCON80, ASCON128, GRAIN128, TINYJAMBU192, TINYJAMBU256, TINYJAMBU128 = range(10)
 RENODE,SENSORTAG,COOJA=range(3)
+platforms=['Renode','Sensortag','Cooja']
 
 sizesfilename='sizes_optim2prueba.dat'
 velencrypt='velencryptprueba.dat'
@@ -301,86 +303,84 @@ def test_secure_link(platform_type=RENODE):
     else:
         print("usando renode")
         platform=renode.renode()
+    #print(platform[2])
+    now=datetime.now()
+    secure_link_times="data_results/secure_link_"+platforms[platform_type]+"_1_salto_"+now.strftime("%m_%d_%Y_%H:%M:%S")+".dat"
+    secure_link_timesht="data_results/secure_link_ht_"+platforms[platform_type]+"_1_salto_"+now.strftime("%m_%d_%Y_%H:%M:%S")+".dat"
     ciphertimerdifs=[]
     ciphertimerdifsht=[]
     rtimers=[]
     rtimersht=[]
-    global securetimeslink
+    #global securetimeslink
     dir_path = os.path.dirname(os.path.realpath(__file__))
     os.chdir(dir_path)
-    if os.path.isfile(secure_link_times):
-        with open(secure_link_times,"r") as decv:
-            read=csv.reader(decv)
-            securetimeslink=[list(map(float,x)) for x in list(read)]
-        with open(secure_link_timesht,"r") as decv:
-            read=csv.reader(decv)
-            securetimeslinkht=[list(map(float,x)) for x in list(read)]
-        print(securetimeslink)
-        plotvellink(securetimeslink,securetimeslinkht)
-    else:
-        for x in range(10):
-            ###############compile images##################
-            os.chdir(dir_path+"/contiki-ng/examples/coap/coap-example-client")
-            compileimage(x,platform)
-            os.chdir(dir_path+"/contiki-ng/examples/coap/coap-example-server")
-            compileimage(x,platform)
-            os.chdir(dir_path)
-            ###############run simulator##################
-            timerdiffl=[]
-            timerdifflht=[]
-            rtimer=[]
-            rtimerht=[]
-            platform.run()
-            for ren in range(100):
-                ###############extract values from log files##################
-                time.sleep(1)
-                #----------------client----------------#
-                clientuart=open(clientloguart,'r')
-                lines=clientuart.readlines()
-                clientuart.close
-                os.remove(clientloguart)
-                for line in lines:
-                    if(line.find("inicio:")!=-1):
-                        t1int=int(line[7:])
-                        rtimer.append(t1int)
-                    if(line.find("htinit:")!=-1):
-                        t1intht=int(line[7:])
-                        rtimerht.append(t1intht)
-                    if(line.find("seguro:")!=-1):
-                        t2int=int(line[7:])
-                        rtimer.append(t2int)
-                        timerdiffl.append(((t2int-t1int)/platform.segundo)*1000)
-                    if(line.find("htfin:")!=-1):
-                        t2intht=int(line[6:])
-                        rtimerht.append(t2intht)
-                        timerdifflht.append(((t2intht-t1intht)/platform.segundo)*1000)
-                #timerdiffl.append(random.randint(8,12))
-                #timerdifflht.append(random.randint(8,12))
-                #rtimer.append([100,110])
-                #rtimerht.append([100,110])
-                    #else:
-                    #    print("fallo handshake")
-                #-------------------------------------------------------------
-                if(len(timerdiffl)==0):
-                    print("fallo el handshake")
-                print(timerdiffl)
-                print(rtimer)
-                platform.run(0)
-            ciphertimerdifs.append(timerdiffl)
-            rtimers.append(rtimer)
-            ciphertimerdifsht.append(timerdifflht)
-            rtimersht.append(rtimerht)
-        print(ciphertimerdifs)
-        print(rtimers)
-        print(ciphertimerdifsht)
-        print(rtimersht)
-        with open(secure_link_times,'w') as f:
-            wr = csv.writer(f)
-            wr.writerows(ciphertimerdifs)
-        with open(secure_link_timesht,'w') as f:
-            wr = csv.writer(f)
-            wr.writerows(ciphertimerdifsht)
-        plotvellink(ciphertimerdifs,ciphertimerdifsht)
+    
+    for x in range(10):
+        ###############compile images##################
+        os.chdir(dir_path+"/contiki-ng/examples/coap/coap-example-client")
+        compileimage(x,platform)
+        os.chdir(dir_path+"/contiki-ng/examples/coap/coap-example-server")
+        compileimage(x,platform)
+        os.chdir(dir_path)
+        ###############run simulator##################
+        timerdiffl=[]
+        timerdifflht=[]
+        rtimer=[]
+        rtimerht=[]
+        platform.run()
+        for ren in range(10):
+            ###############extract values from log files##################
+            print("cifrador:",ciphers[x],"muestra:",ren)
+            time.sleep(1)
+            #----------------client----------------#
+            clientuart=open(clientloguart,'r')
+            lines=clientuart.readlines()
+            clientuart.close
+            os.remove(clientloguart)
+            for line in lines:
+                if(line.find("inicio:")!=-1):
+                    t1int=int(line[7:])
+                    rtimer.append(t1int)
+                if(line.find("htinit:")!=-1):
+                    t1intht=int(line[7:])
+                    rtimerht.append(t1intht)
+                if(line.find("seguro:")!=-1):
+                    t2int=int(line[7:])
+                    rtimer.append(t2int)
+                    timerdiffl.append(((t2int-t1int)/platform.segundo)*1000)
+                if(line.find("htfin:")!=-1):
+                    t2intht=int(line[6:])
+                    rtimerht.append(t2intht)
+                    timerdifflht.append(((t2intht-t1intht)/platform.segundo)*1000)
+            #timerdiffl.append(random.randint(8,12))
+            #timerdifflht.append(random.randint(8,12))
+            #rtimer.append([100,110])
+            #rtimerht.append([100,110])
+                #else:
+                #    print("fallo handshake")
+            #-------------------------------------------------------------
+            if(len(timerdiffl)==0):
+                print("fallo el handshake")
+            print(timerdiffl)
+            print(rtimer)
+            platform.run(0)
+            #return
+        #return
+        ciphertimerdifs.append(timerdiffl)
+        rtimers.append(rtimer)
+        ciphertimerdifsht.append(timerdifflht)
+        rtimersht.append(rtimerht)
+    print(ciphertimerdifs)
+    print(rtimers)
+    print(ciphertimerdifsht)
+    print(rtimersht)
+    with open(secure_link_times,'w') as f:
+        wr = csv.writer(f)
+        wr.writerows(ciphertimerdifs)
+    with open(secure_link_timesht,'w') as f:
+        wr = csv.writer(f)
+        wr.writerows(ciphertimerdifsht)
+    plotvellink(ciphertimerdifs,ciphertimerdifsht)
 
 
 
@@ -401,7 +401,7 @@ if __name__ == "__main__":
     
     #np.save(velencrypt,ciphertimerdifsencrypt)
     #testvelocitycipher()
-    test_secure_link(SENSORTAG)
+    test_secure_link()
     #testimagessize(COOJA)
     # platform=sensortag.sensortag()
     # os.chdir(dir_path+"/contiki-ng/examples/coap/coap-example-client")

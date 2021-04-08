@@ -10,12 +10,14 @@ class renode:
         print(with_clean)
         if with_clean==1:
             os.system("make TARGET=cc2538dk clean")
-        return os.system("make TARGET=cc2538dk WERROR=0" +defines+ "MAKE_WITH_DTLS=1 MAKE_COAP_DTLS_KEYSTORE=MAKE_COAP_DTLS_KEYSTORE_SIMPLE")
+        command="make TARGET=cc2538dk WERROR=0 " +defines+ " MAKE_WITH_DTLS=1 MAKE_COAP_DTLS_KEYSTORE=MAKE_COAP_DTLS_KEYSTORE_SIMPLE"
+        print(command)
+        return os.system(command)
 
-    def run(self):
+    def run(self,program=1):
         renoder = subprocess.Popen(["renode", "--disable-xwt", "coap_test.resc", "--port", "33334"])
         print("Esperando..")
-        time.sleep(120)
+        time.sleep(8)
         tn = Telnet("127.0.0.1",33334)
         tn.write("quit\n".encode('ascii'))
         tn.close()
