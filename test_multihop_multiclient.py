@@ -7,10 +7,10 @@ import os
 import time
 import threading
 
-platform=sensortag.sensortag()
+
 
 async def ciphertest(websocket, path):
-    global platform
+    platform=sensortag.sensortag()
     mesj = await websocket.recv()
     print("< {}".format(mesj))
 
@@ -41,8 +41,8 @@ def server():
     asyncio.get_event_loop().run_until_complete(start_server)
     asyncio.get_event_loop().run_forever()
 
-def sendaction(action):
-    async with websockets.connect('ws://localhost:8765') as websocket:
+async def saction(action):
+    async with websockets.connect('ws://192.168.0.4:8765') as websocket:
 
         await websocket.send(action)
         print("> {}".format(action))
@@ -51,6 +51,8 @@ def sendaction(action):
         print("< {}".format(greeting))
     return(greeting)
 
+def sendaction(action):
+    asyncio.get_event_loop().run_until_complete(saction(action))
 
 if __name__ == "__main__":    
     server()
