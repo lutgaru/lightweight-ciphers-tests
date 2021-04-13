@@ -10,6 +10,7 @@ import csv
 import sensortag
 import renode
 import cooja
+import test_multihop_multiclient
 
 AES, GIFTCOFB, XOODYAK, ASCON128A, ASCON80, ASCON128, GRAIN128, TINYJAMBU192, TINYJAMBU256, TINYJAMBU128 = range(10)
 RENODE,SENSORTAG,COOJA=range(3)
@@ -96,7 +97,8 @@ def bar_plot(ax, data, error=None ,colors=None, total_width=0.8, single_width=1,
         ax.legend(bars, data.keys())   
 
 def appendsize(platform):
-    sizestr=subprocess.run(["size","coap-example-client.cc2538dk"],stdout=subprocess.PIPE,text=True)
+    #sizestr=subprocess.run(["size","coap-example-client.cc2538dk"],stdout=subprocess.PIPE,text=True)
+    sizestr=platform.getsize()
     sizesvals=sizestr.stdout.split("\n")[1].split("\t")
     print(sizestr.stdout.split("\n"))
     print(sizesvals)
@@ -174,7 +176,9 @@ def testimagessize(platform_type=RENODE):
 
     dir_path = os.path.dirname(os.path.realpath(__file__))
     os.chdir(dir_path+data_result_dir)
+    print("holaa")
     if os.path.isfile(sizesfilename):
+        #print("holaa")
         sizesback = np.loadtxt(sizesfilename)
         textvs=sizesback[0,:]
         datavs=sizesback[1,:]
@@ -186,6 +190,8 @@ def testimagessize(platform_type=RENODE):
         print(dir_path+"/contiki-ng/examples/coap/coap-example-client")
         for x in range(10):
             compileimage(x,platform)
+            if platform_type==COOJA:
+                platform.run(x)
             appendsize(platform)
         os.chdir(dir_path)
         np.savetxt(sizesfilename,[textvs,datavs,bssvs,decvs])
@@ -319,8 +325,11 @@ def test_secure_link(platform_type=RENODE):
         ###############compile images##################
         os.chdir(dir_path+"/contiki-ng/examples/coap/coap-example-client")
         compileimage(x,platform)
-        os.chdir(dir_path+"/contiki-ng/examples/coap/coap-example-server")
-        compileimage(x,platform)
+        if(platform_type==SENSORTAG):
+            test_multihop_multiclient.sendaction('m-'+x)
+        else:
+            os.chdir(dir_path+"/contiki-ng/examples/coap/coap-example-server")
+            compileimage(x,platform)
         os.chdir(dir_path)
         ###############run simulator##################
         timerdiffl=[]
@@ -328,7 +337,7 @@ def test_secure_link(platform_type=RENODE):
         rtimer=[]
         rtimerht=[]
         platform.run()
-        for ren in range(10):
+        for ren in range(100):
             ###############extract values from log files##################
             print("cifrador:",ciphers[x],"muestra:",ren)
             time.sleep(1)
@@ -402,7 +411,7 @@ if __name__ == "__main__":
     #np.save(velencrypt,ciphertimerdifsencrypt)
     #testvelocitycipher()
     test_secure_link()
-    #testimagessize(COOJA)
+    # testimagessize(COOJA)
     # platform=sensortag.sensortag()
     # os.chdir(dir_path+"/contiki-ng/examples/coap/coap-example-client")
     # compileimage(AES,platform,clean=0)
