@@ -35,26 +35,26 @@ ciphertimerdifsdecrypt=[]
 ciphertimerdifsencrypt=[]
 securetimeslink=[]
 
-def compileimage(typecif,platform,clean=1):
+def compileimage(typecif,platform,clean=1,withoptim=1):
     
     if typecif==GIFTCOFB:
-        exito=platform.make("MAKE_WITH_GIFTCOFB=1",with_clean=clean)
+        exito=platform.make("MAKE_WITH_GIFTCOFB=1",with_clean=clean,withoptim=withoptim)
     elif typecif==XOODYAK:
-        exito=platform.make("MAKE_WITH_XOODYAK=1",with_clean=clean)
+        exito=platform.make("MAKE_WITH_XOODYAK=1",with_clean=clean,withoptim=withoptim)
     elif typecif==ASCON128:
-        exito=platform.make("MAKE_WITH_ASCON128=1",with_clean=clean)
+        exito=platform.make("MAKE_WITH_ASCON128=1",with_clean=clean,withoptim=withoptim)
     elif typecif==ASCON128A:
-        exito=platform.make("MAKE_WITH_ASCON128A=1",with_clean=clean)
+        exito=platform.make("MAKE_WITH_ASCON128A=1",with_clean=clean,withoptim=withoptim)
     elif typecif==ASCON80:
-        exito=platform.make("MAKE_WITH_ASCON80=1",with_clean=clean)
-    #elif typecif==GRAIN128:
-    #    os.system("make TARGET=cc2538dk WERROR=0 MAKE_WITH_GRAIN128=1 MAKE_WITH_DTLS=1 MAKE_COAP_DTLS_KEYSTORE=MAKE_COAP_DTLS_KEYSTORE_SIMPLE")
+        exito=platform.make("MAKE_WITH_ASCON80=1",with_clean=clean,withoptim=withoptim)
+    elif typecif==GRAIN128:
+        exito=platform.make("MAKE_WITH_GRAIN128=1",with_clean=clean,withoptim=withoptim)
     elif typecif==TINYJAMBU128:
-        exito=platform.make("MAKE_WITH_TINYJAMBU128=1",with_clean=clean)
+        exito=platform.make("MAKE_WITH_TINYJAMBU128=1",with_clean=clean,withoptim=withoptim)
     elif typecif==TINYJAMBU192:
-        exito=platform.make("MAKE_WITH_TINYJAMBU192=1",with_clean=clean)
+        exito=platform.make("MAKE_WITH_TINYJAMBU192=1",with_clean=clean,withoptim=withoptim)
     elif typecif==TINYJAMBU256:
-        exito=platform.make("MAKE_WITH_TINYJAMBU256=1",with_clean=clean)
+        exito=platform.make("MAKE_WITH_TINYJAMBU256=1",with_clean=clean,withoptim=withoptim)
     else:
         exito=platform.make(with_clean=clean)
     
@@ -165,7 +165,7 @@ def plotvellink(vellinks,vellinksht):
     plt.xticks(range(10),ciphers)
     plt.show()
 
-def testimagessize(platform_type=RENODE):
+def testimagessize(platform_type=RENODE,withoptim=1):
     global textvs,datavs,bssvs,decvs,hexvs
     if(platform_type==SENSORTAG):
         platform=sensortag.sensortag()
@@ -173,7 +173,8 @@ def testimagessize(platform_type=RENODE):
         platform=cooja.cooja()
     else:
         platform=renode.renode()
-
+    now=datetime.now()
+    sizesfilename='sizes_'+platforms[platform_type]+'_'+now.strftime("%m_%d_%Y_%H:%M:%S")+'.dat'
     dir_path = os.path.dirname(os.path.realpath(__file__))
     os.chdir(dir_path+data_result_dir)
     print("holaa")
@@ -189,9 +190,7 @@ def testimagessize(platform_type=RENODE):
         os.chdir(dir_path+"/contiki-ng/examples/coap/coap-example-client")
         print(dir_path+"/contiki-ng/examples/coap/coap-example-client")
         for x in range(10):
-            compileimage(x,platform)
-            if platform_type==COOJA:
-                platform.run(x)
+            compileimage(x,platform,withoptim=withoptim)
             appendsize(platform)
         os.chdir(dir_path)
         np.savetxt(sizesfilename,[textvs,datavs,bssvs,decvs])
@@ -215,7 +214,7 @@ def testimagessize(platform_type=RENODE):
     plt.show()
 
 
-def testvelocitycipher(platform_type=RENODE):
+def testvelocitycipher(platform_type=RENODE,withoptim=1):
     global ciphertimerdifs
     global ciphertimerdifsdecrypt
     global ciphertimerdifsencrypt
@@ -228,76 +227,65 @@ def testvelocitycipher(platform_type=RENODE):
     
     dir_path = os.path.dirname(os.path.realpath(__file__))
     os.chdir(dir_path+data_result_dir)
-    if os.path.isfile(veldecrypt) and os.path.isfile(velencrypt):
-        with open(veldecrypt,"r") as decv:
-            read=csv.reader(decv)
-            ciphertimerdifsdecrypt=[list(map(float,x)) for x in list(read)]
-        with open(velencrypt,"r") as encv:
-            read=csv.reader(encv)
-            ciphertimerdifsencrypt=[list(map(float,x)) for x in list(read)]
-        #velenback = np.load(velencrypt)
-        #ciphertimerdifsencrypt=velenback.items()
-        #velenback = np.load(veldecrypt)
-        print(ciphertimerdifsdecrypt)
-        print(ciphertimerdifsencrypt)
-        #print(velenback)
-        #ciphertimerdifsdecrypt=velenback.items()
-        #hexvs=sizesback[4,:]
-    else:
-        for x in range(100):
-            ###############compile images##################
-            os.chdir(dir_path+"/contiki-ng/examples/coap/coap-example-client")
-            compileimage(x,platform)
-            os.chdir(dir_path+"/contiki-ng/examples/coap/coap-example-server")
-            compileimage(x,platform)
-            os.chdir(dir_path)
-            ###############run renode emulator##################
-            platform.run()
-            ###############extract values from log files##################
-            timerdiffe=[]
-            timerdiffd=[]
-            time.sleep(1)
-            #----------------client----------------#
-            clientuart=open(clientloguart,'r')
-            lines=clientuart.readlines()
-            clientuart.close
-            os.remove(clientloguart)
-            for line in lines:
-                if(line.find("decrypt1")!=-1):
-                    t1int=int(line[8:])
-                if(line.find("decrypt2")!=-1):
-                    t2int=int(line[8:])
-                    timerdiffd.append(((t2int-t1int)/32768)*1000)
-                if(line.find("encrypt1")!=-1):
-                    t1int=int(line[8:])
-                if(line.find("encrypt2")!=-1):
-                    t2int=int(line[8:])
-                    timerdiffe.append(((t2int-t1int)/32768)*1000)
-            #----------------server----------------#
-            serveruart=open(serverloguart,'r')
-            lines=serveruart.readlines()
-            serveruart.close
-            os.remove(serverloguart)
-            for line in lines:
-                if(line.find("decrypt1")!=-1):
-                    t1int=int(line[8:])
-                if(line.find("decrypt2")!=-1):
-                    t2int=int(line[8:])
-                    timerdiffd.append(((t2int-t1int)/32768)*1000)
-                if(line.find("encrypt1")!=-1):
-                    t1int=int(line[8:])
-                if(line.find("encrypt2")!=-1):
-                    t2int=int(line[8:])
-                    timerdiffe.append(((t2int-t1int)/32768)*1000)
-            print(timerdiffe,timerdiffd)
-            ciphertimerdifsdecrypt.append(timerdiffd)
-            ciphertimerdifsencrypt.append(timerdiffe)
-        with open(velencrypt,'w') as f:
-            wr = csv.writer(f)
-            wr.writerows(ciphertimerdifsencrypt)
-        with open(veldecrypt,'w') as f:
-            wr = csv.writer(f)
-            wr.writerows(ciphertimerdifsdecrypt)
+    now=datetime.now()
+    velencrypt="data_results/velencryptprueba"+platforms[platform_type]+now.strftime("%m_%d_%Y_%H:%M:%S")+".dat"
+    veldecrypt="data_results/veldecryptprueba"+platforms[platform_type]+now.strftime("%m_%d_%Y_%H:%M:%S")+".dat"
+    for x in range(10):
+        if platform_type==SENSORTAG and (x==ASCON128 or x== ASCON128A or x==ASCON80):
+            continue
+        ###############compile images##################
+        os.chdir(dir_path+"/contiki-ng/examples/coap_cipher_vel_test/coap-example-client")
+        compileimage(x,platform,withoptim=withoptim)
+        os.chdir(dir_path+"/contiki-ng/examples/coap_cipher_vel_test/coap-example-server")
+        compileimage(x,platform,withoptim=withoptim)
+        os.chdir(dir_path)
+        ###############run renode emulator##################
+        platform.run()
+        ###############extract values from log files##################
+        timerdiffe=[]
+        timerdiffd=[]
+        time.sleep(1)
+        #----------------client----------------#
+        clientuart=open(clientloguart,'r')
+        lines=clientuart.readlines()
+        clientuart.close
+        os.remove(clientloguart)
+        for line in lines:
+            if(line.find("decrypt1")!=-1):
+                t1int=int(line[line.find("decrypt1")+8:])
+            if(line.find("decrypt2")!=-1):
+                t2int=int(line[line.find("decrypt2")+8:])
+                timerdiffd.append(((t2int-t1int)/platform.segundo)*1000)
+            if(line.find("encrypt1")!=-1):
+                t1int=int(line[line.find("encrypt1")+8:])
+            if(line.find("encrypt2")!=-1):
+                t2int=int(line[line.find("encrypt2")+8:])
+                timerdiffe.append(((t2int-t1int)/platform.segundo)*1000)
+        #----------------server----------------#
+        serveruart=open(serverloguart,'r')
+        lines=serveruart.readlines()
+        serveruart.close
+        os.remove(serverloguart)
+        for line in lines:
+            if(line.find("decrypt1")!=-1):
+                t1int=int(line[line.find("decrypt1")+8:])
+            if(line.find("decrypt2")!=-1):
+                t2int=int(line[line.find("decrypt2")+8:])
+                timerdiffd.append(((t2int-t1int)/platform.segundo)*1000)
+            if(line.find("encrypt1")!=-1):
+                t1int=int(line[line.find("encrypt1")+8:])
+            if(line.find("encrypt2")!=-1):
+                t2int=int(line[line.find("encrypt2")+8:])
+                timerdiffe.append(((t2int-t1int)/platform.segundo)*1000)
+        print(timerdiffe,timerdiffd)
+        ciphertimerdifsdecrypt.append(timerdiffd)
+        ciphertimerdifsencrypt.append(timerdiffe)
+    with open(velencrypt,'w') as f:
+        wr = csv.writer(f)
+        wr.writerows(ciphertimerdifsencrypt)
+    with open(veldecrypt,'w') as f:
+        wr = csv.writer(f)
+        wr.writerows(ciphertimerdifsdecrypt)
     plotvelcipher(ciphertimerdifsencrypt,ciphertimerdifsdecrypt)
 
 def test_secure_link(platform_type=RENODE):
@@ -311,8 +299,8 @@ def test_secure_link(platform_type=RENODE):
         platform=renode.renode()
     #print(platform[2])
     now=datetime.now()
-    secure_link_times="data_results/secure_link_"+platforms[platform_type]+"_1_salto_"+now.strftime("%m_%d_%Y_%H:%M:%S")+".dat"
-    secure_link_timesht="data_results/secure_link_ht_"+platforms[platform_type]+"_1_salto_"+now.strftime("%m_%d_%Y_%H:%M:%S")+".dat"
+    secure_link_times="data_results/secure_link_"+platforms[platform_type]+"_2_salto_"+now.strftime("%m_%d_%Y_%H:%M:%S")+".dat"
+    secure_link_timesht="data_results/secure_link_ht_"+platforms[platform_type]+"_2_salto_"+now.strftime("%m_%d_%Y_%H:%M:%S")+".dat"
     ciphertimerdifs=[]
     ciphertimerdifsht=[]
     rtimers=[]
@@ -320,13 +308,14 @@ def test_secure_link(platform_type=RENODE):
     #global securetimeslink
     dir_path = os.path.dirname(os.path.realpath(__file__))
     os.chdir(dir_path)
-    
     for x in range(10):
+        if x == 6:
+            continue
         ###############compile images##################
         os.chdir(dir_path+"/contiki-ng/examples/coap/coap-example-client")
         compileimage(x,platform)
         if(platform_type==SENSORTAG):
-            test_multihop_multiclient.sendaction('m-'+x)
+            test_multihop_multiclient.sendaction('m-'+str(x))
         else:
             os.chdir(dir_path+"/contiki-ng/examples/coap/coap-example-server")
             compileimage(x,platform)
@@ -337,14 +326,14 @@ def test_secure_link(platform_type=RENODE):
         rtimer=[]
         rtimerht=[]
         platform.run()
-        for ren in range(100):
+        for ren in range(10):
             ###############extract values from log files##################
             print("cifrador:",ciphers[x],"muestra:",ren)
             time.sleep(1)
             #----------------client----------------#
             clientuart=open(clientloguart,'r')
             lines=clientuart.readlines()
-            clientuart.close
+            clientuart.close()
             os.remove(clientloguart)
             for line in lines:
                 if(line.find("inicio:")!=-1):
@@ -372,7 +361,7 @@ def test_secure_link(platform_type=RENODE):
                 print("fallo el handshake")
             print(timerdiffl)
             print(rtimer)
-            platform.run(0)
+            platform.run()
             #return
         #return
         ciphertimerdifs.append(timerdiffl)
@@ -389,7 +378,7 @@ def test_secure_link(platform_type=RENODE):
     with open(secure_link_timesht,'w') as f:
         wr = csv.writer(f)
         wr.writerows(ciphertimerdifsht)
-    plotvellink(ciphertimerdifs,ciphertimerdifsht)
+    #plotvellink(ciphertimerdifs,ciphertimerdifsht)
 
 
 
@@ -410,16 +399,24 @@ if __name__ == "__main__":
     
     #np.save(velencrypt,ciphertimerdifsencrypt)
     #testvelocitycipher()
-    test_secure_link()
-    # testimagessize(COOJA)
-    # platform=sensortag.sensortag()
-    # os.chdir(dir_path+"/contiki-ng/examples/coap/coap-example-client")
-    # compileimage(AES,platform,clean=0)
-    # os.chdir(dir_path+"/contiki-ng/examples/coap/coap-example-server")
-    # compileimage(AES,platform,clean=0)
-    # os.chdir(dir_path)
-    # platform.run()
+    # for test in range(10):
+    #    print("pasada",test)
+    #    test_secure_link(RENODE)
+    #testimagessize(SENSORTAG,withoptim=0)
 
+    #testvelocitycipher(SENSORTAG,withoptim=0)
+    #plataform=sensortag.sensortag()
+    plataform=renode.renode()
+    os.chdir(dir_path+"/contiki-ng/examples/coap_cipher_vel_test/coap-example-client")
+    compileimage(GRAIN128,plataform,clean=1)
+    os.chdir(dir_path+"/contiki-ng/examples/coap_cipher_vel_test/coap-example-server")
+    compileimage(GRAIN128,plataform,clean=1)
+    # plataform.run(1,1)
+    # os.chdir(dir_path)
+    #platform=cooja.cooja()
+   
+    #platform.run()
+    #testimagessize(RENODE)
     #plotvelcipher(ciphertimerdifsencrypt,ciphertimerdifsdecrypt)
     pass
 #dir_path = os.path.dirname(os.path.realpath(__file__))

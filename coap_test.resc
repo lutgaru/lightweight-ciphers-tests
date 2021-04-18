@@ -25,26 +25,26 @@ emulation CreateWirelessMedium "wireless"
 wireless SetRangeWirelessFunction 11
 emulation LogWirelessTraffic
 ######################### COAP SERVER - begin #########################
-$bin=@contiki-ng/examples/coap/coap-example-server/coap-example-server.cc2538dk
+$bin=@contiki-ng/examples/coap_cipher_vel_test/coap-example-server/coap-example-server.cc2538dk
 $name="server"
 i $ORIGIN/cc2538-node.resc
 connector Connect radio wireless
 wireless SetPosition radio 0 0 0
 logLevel 3
-#sysbus.uart0 CreateFileBackend @/home/neft/tesistests/contiki-ng/examples/coap/serverloguart.dat
+#sysbus.uart0 CreateFileBackend @/home/nefta/lightweight-ciphers-tests/serverloguart.dat
 #machine SyncUnit 100
 #showAnalyzer sysbus.uart0
 mach clear
 ########################## UDP SERVER - end ##########################
 
 ######################### COAP CLIENT - begin #########################
-$bin=@contiki-ng/examples/coap/coap-example-client/coap-example-client.cc2538dk
+$bin=@contiki-ng/examples/coap_cipher_vel_test/coap-example-client/coap-example-client.cc2538dk
 $name="client"
 i $ORIGIN/cc2538-node.resc
 connector Connect radio wireless
 wireless SetPosition radio 1 0 0
 logLevel 3
-sysbus.uart0 CreateFileBackend @/home/neft/lightweight-ciphers-tests/clientloguart.dat
+#sysbus.uart0 CreateFileBackend @/home/nefta/lightweight-ciphers-tests/clientloguart.dat
 showAnalyzer sysbus.uart0
 mach clear
 ########################## UDP CLIENT - end ##########################
