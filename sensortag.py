@@ -9,7 +9,7 @@ class sensortag:
 
     segundo=65536
 
-    def make(self,defines='',with_clean=1,withoptim=1):
+    def make(self,defines='',with_clean=1,withoptim=1, args=''):
         if with_clean==1:
             os.system("make TARGET=cc26x0-cc13x0 clean")
         if withoptim:
@@ -22,18 +22,18 @@ class sensortag:
         ser = serial.Serial(port, 115200,timeout=0.2)
         dir_path = os.path.dirname(os.path.realpath(__file__))
         print(dir_path+file)
-        f = open(dir_path+"/"+file,'w')  
+        f = open(dir_path+"/"+file,'wb')  
         ttimeout=time.time()+timeout
         ser.flushInput()
         time.sleep(0.2)
         os.system(reset)
         print(ttimeout,time.time())
         while ser.is_open:
-            data=ser.readline()
-            if(data!=b''):
+            data=ser.read(size=ser.in_waiting)
+            #if(data!=b''):
                 #print(data.decode('utf-8'))
-                data=data.decode('utf-8',errors='ignore')
-                f.write(data)
+                #data=data.decode('utf-8',errors='ignore')
+            f.write(data)
             if(time.time()>ttimeout):
                 break
             #time.sleep(1)
@@ -52,8 +52,8 @@ class sensortag:
             time.sleep(0.2)
             resc="/opt/ti/uniflash/dslite.sh -c cliente.ccxml --post-flash-device-cmd PinReset"
             ress="/opt/ti/uniflash/dslite.sh -c server.ccxml --post-flash-device-cmd PinReset"
-            clientthread=threading.Thread(target=self.threaduart,args=("/dev/ttyACM0","clientloguart.dat",120,resc,))#,daemon=True)
-            serverthread=threading.Thread(target=self.threaduart,args=("/dev/ttyACM2","serverloguart.dat",120,ress,))#,daemon=True)
+            clientthread=threading.Thread(target=self.threaduart,args=("/dev/ttyACM0","clientloguart.dat",300,resc,))#,daemon=True)
+            serverthread=threading.Thread(target=self.threaduart,args=("/dev/ttyACM2","serverloguart.dat",300,ress,))#,daemon=True)
             print("= "*80)
             clientthread.start()
             serverthread.start()
@@ -67,6 +67,7 @@ class sensortag:
                 exito1=os.system("/opt/ti/uniflash/dslite.sh -c cliente.ccxml -f contiki-ng/examples/coap/coap-example-client/build/cc26x0-cc13x0/sensortag/cc2650/coap-example-client.hex")
                 #exito2=os.system("/opt/ti/uniflash/dslite.sh -c server.ccxml -f contiki-ng/examples/coap/coap-example-server/build/cc26x0-cc13x0/sensortag/cc2650/coap-example-server.hex")
                 exito2=test_multihop_multiclient.sendaction('p')
+                exit()
                 if (exito1!=0):
                     return -1
             time.sleep(0.2)

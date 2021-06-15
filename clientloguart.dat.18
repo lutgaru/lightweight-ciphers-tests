@@ -1,0 +1,13 @@
+[INFO: Main      ] Starting Contiki-NG-release/v4.6-68-gabc85bf54-dirty
+[INFO: Main      ] - Routing: RPL Lite
+[INFO: Main      ] - Net: sicslowpan
+[INFO: Main      ] - MAC: CSMA
+[INFO: Main      ] - 802.15.4 PANID: 0xabcd
+[INFO: Main      ] - 802.15.4 Default channel: 26
+[INFO: Main      ] Node ID: 2
+[INFO: Main      ] Link-layer address: 0000.0000.0000.0002
+[INFO: Main      ] Tentative link-local IPv6 address: fe80::200:0:0:2
+[INFO: CC2538DK  ] TI SmartRF06 + cc2538EM
+Started DTLS retransmit process
+inicio:10758
+Press a button to request /test/hello

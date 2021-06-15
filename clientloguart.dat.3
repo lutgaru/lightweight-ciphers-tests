@@ -1,0 +1,460 @@
+[INFO: Main      ] Starting Contiki-NG-release/v4.6-68-gabc85bf54-dirty
+[INFO: Main      ] - Routing: RPL Lite
+[INFO: Main      ] - Net: sicslowpan
+[INFO: Main      ] - MAC: CSMA
+[INFO: Main      ] - 802.15.4 PANID: 0xabcd
+[INFO: Main      ] - 802.15.4 Default channel: 26
+[INFO: Main      ] Node ID: 2
+[INFO: Main      ] Link-layer address: 0000.0000.0000.0002
+[INFO: Main      ] Tentative link-local IPv6 address: fe80::200:0:0:2
+[INFO: CC2538DK  ] TI SmartRF06 + cc2538EM
+Started DTLS retransmit process
+inicio:10758
+Press a button to request /test/hello
+ep: coaps://[fd00::200:0:0:1], 0
+htinit:143854
+dtls_new_peer: [FD00:0000:0000:0000:0200:0000:0000:0001]:5684
+DTLSv12: initialize HASH_SHA256
+clear MAC
+send handshake packet of type: client_hello (1)
+conectando..2
+dtls_handle_message: FOUND PEER
+got packet 22 (44 bytes)
+received handshake packet of type: hello_verify_request (3)
+handle handshake packet of type: hello_verify_request (3)
+clear MAC
+send handshake packet of type: client_hello (1)
+dtls_handle_message: FOUND PEER
+got packet 22 (63 bytes)
+new packet arrived with seq_nr: 1
+new bitfield is               : ffffffffffffffff
+received handshake packet of type: server_hello (2)
+handle handshake packet of type: server_hello (2)
+dtls_handle_message: FOUND PEER
+got packet 22 (25 bytes)
+new packet arrived with seq_nr: 2
+new bitfield is               : ffffffffffffffff
+received handshake packet of type: server_hello_done (14)
+handle handshake packet of type: server_hello_done (14)
+send handshake packet of type: client_key_exchange (16)
+key_block (40 bytes):
+send handshake packet of type: finished (20)
+dtls_prepare_record(): encrypt using TLS_PSK_WITH_AES_128_CCM_8
+encrypt, 144477,144487
+dtls_handle_message: FOUND PEER
+got packet 20 (14 bytes)
+new packet arrived with seq_nr: 3
+new bitfield is               : ffffffffffffffff
+dtls_handle_message: FOUND PEER
+got packet 22 (61 bytes)
+decrypt, 145003,145009
+decrypt_verify(): found 24 bytes cleartext
+received handshake packet of type: finished (20)
+handle handshake packet of type: finished (20)
+Handshake complete
+htfin:145087
+seguro 1: 145090
+dtls_prepare_record(): encrypt using TLS_PSK_WITH_AES_128_CCM_8
+encrypt, 145100,145106
+dtls_handle_message: FOUND PEER
+got packet 23 (48 bytes)
+decrypt, 145200,145206
+decrypt_verify(): found 11 bytes cleartext
+new packet arrived with seq_nr: 1
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+OBSERVE_OK: A
+dtls_handle_message: FOUND PEER
+got packet 23 (50 bytes)
+decrypt, 147890,147896
+decrypt_verify(): found 13 bytes cleartext
+new packet arrived with seq_nr: 2
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AA
+dtls_handle_message: FOUND PEER
+got packet 23 (51 bytes)
+decrypt, 168051,168058
+decrypt_verify(): found 14 bytes cleartext
+new packet arrived with seq_nr: 3
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAA
+dtls_handle_message: FOUND PEER
+got packet 23 (52 bytes)
+decrypt, 188212,188219
+decrypt_verify(): found 15 bytes cleartext
+new packet arrived with seq_nr: 4
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (53 bytes)
+decrypt, 208374,208380
+decrypt_verify(): found 16 bytes cleartext
+new packet arrived with seq_nr: 5
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (54 bytes)
+decrypt, 228535,228541
+decrypt_verify(): found 17 bytes cleartext
+new packet arrived with seq_nr: 6
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (55 bytes)
+decrypt, 248696,248703
+decrypt_verify(): found 18 bytes cleartext
+new packet arrived with seq_nr: 7
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (56 bytes)
+decrypt, 268858,268864
+decrypt_verify(): found 19 bytes cleartext
+new packet arrived with seq_nr: 8
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (57 bytes)
+decrypt, 289019,289025
+decrypt_verify(): found 20 bytes cleartext
+new packet arrived with seq_nr: 9
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (58 bytes)
+decrypt, 309180,309187
+decrypt_verify(): found 21 bytes cleartext
+new packet arrived with seq_nr: 10
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (59 bytes)
+decrypt, 329345,329351
+decrypt_verify(): found 22 bytes cleartext
+new packet arrived with seq_nr: 11
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (60 bytes)
+decrypt, 349503,349509
+decrypt_verify(): found 23 bytes cleartext
+new packet arrived with seq_nr: 12
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (61 bytes)
+decrypt, 369664,369670
+decrypt_verify(): found 24 bytes cleartext
+new packet arrived with seq_nr: 13
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (62 bytes)
+decrypt, 389825,389832
+decrypt_verify(): found 25 bytes cleartext
+new packet arrived with seq_nr: 14
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (63 bytes)
+decrypt, 409987,409993
+decrypt_verify(): found 26 bytes cleartext
+new packet arrived with seq_nr: 15
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (64 bytes)
+decrypt, 430148,430154
+decrypt_verify(): found 27 bytes cleartext
+new packet arrived with seq_nr: 16
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (65 bytes)
+decrypt, 450309,450316
+decrypt_verify(): found 28 bytes cleartext
+new packet arrived with seq_nr: 17
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (66 bytes)
+decrypt, 470470,470477
+decrypt_verify(): found 29 bytes cleartext
+new packet arrived with seq_nr: 18
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (67 bytes)
+decrypt, 490632,490638
+decrypt_verify(): found 30 bytes cleartext
+new packet arrived with seq_nr: 19
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (68 bytes)
+decrypt, 510793,510800
+decrypt_verify(): found 31 bytes cleartext
+new packet arrived with seq_nr: 20
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (69 bytes)
+decrypt, 530954,530961
+decrypt_verify(): found 32 bytes cleartext
+new packet arrived with seq_nr: 21
+new bitfield is               : ffffffffffffffff
+** application data:
+dtls_prepare_record(): encrypt using TLS_PSK_WITH_AES_128_CCM_8
+encrypt, 530980,530983
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: ò*	˝„ÕèéP4òç-3òAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (70 bytes)
+decrypt, 551116,551125
+decrypt_verify(): found 33 bytes cleartext
+new packet arrived with seq_nr: 22
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (71 bytes)
+decrypt, 571277,571287
+decrypt_verify(): found 34 bytes cleartext
+new packet arrived with seq_nr: 23
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (72 bytes)
+decrypt, 591438,591448
+decrypt_verify(): found 35 bytes cleartext
+new packet arrived with seq_nr: 24
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (73 bytes)
+decrypt, 611600,611609
+decrypt_verify(): found 36 bytes cleartext
+new packet arrived with seq_nr: 25
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (74 bytes)
+decrypt, 631761,631770
+decrypt_verify(): found 37 bytes cleartext
+new packet arrived with seq_nr: 26
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (75 bytes)
+decrypt, 651922,651932
+decrypt_verify(): found 38 bytes cleartext
+new packet arrived with seq_nr: 27
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (76 bytes)
+decrypt, 672083,672093
+decrypt_verify(): found 39 bytes cleartext
+new packet arrived with seq_nr: 28
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (77 bytes)
+decrypt, 692245,692254
+decrypt_verify(): found 40 bytes cleartext
+new packet arrived with seq_nr: 29
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (78 bytes)
+decrypt, 712406,712416
+decrypt_verify(): found 41 bytes cleartext
+new packet arrived with seq_nr: 30
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (79 bytes)
+decrypt, 732567,732577
+decrypt_verify(): found 42 bytes cleartext
+new packet arrived with seq_nr: 31
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (80 bytes)
+decrypt, 752729,752738
+decrypt_verify(): found 43 bytes cleartext
+new packet arrived with seq_nr: 32
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (81 bytes)
+decrypt, 772890,772900
+decrypt_verify(): found 44 bytes cleartext
+new packet arrived with seq_nr: 33
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (82 bytes)
+decrypt, 793051,793061
+decrypt_verify(): found 45 bytes cleartext
+new packet arrived with seq_nr: 34
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (83 bytes)
+decrypt, 813212,813222
+decrypt_verify(): found 46 bytes cleartext
+new packet arrived with seq_nr: 35
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (84 bytes)
+decrypt, 833374,833383
+decrypt_verify(): found 47 bytes cleartext
+new packet arrived with seq_nr: 36
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (85 bytes)
+decrypt, 853535,853545
+decrypt_verify(): found 48 bytes cleartext
+new packet arrived with seq_nr: 37
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (86 bytes)
+decrypt, 873696,873706
+decrypt_verify(): found 49 bytes cleartext
+new packet arrived with seq_nr: 38
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+dtls_handle_message: FOUND PEER
+got packet 23 (49 bytes)
+decrypt, 893851,893858
+decrypt_verify(): found 12 bytes cleartext
+new packet arrived with seq_nr: 39
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: A
+dtls_handle_message: FOUND PEER
+got packet 23 (50 bytes)
+decrypt, 914012,914019
+decrypt_verify(): found 13 bytes cleartext
+new packet arrived with seq_nr: 40
+new bitfield is               : ffffffffffffffff
+** application data:
+Notification handler
+Observee URI: /test/push
+NOTIFICATION OK: AA

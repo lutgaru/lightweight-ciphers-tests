@@ -1,0 +1,104 @@
+[INFO: Main      ] Starting Contiki-NG-release/v4.6-68-gabc85bf54-dirty
+[INFO: Main      ] - Routing: RPL Lite
+[INFO: Main      ] - Net: sicslowpan
+[INFO: Main      ] - MAC: CSMA
+[INFO: Main      ] - 802.15.4 PANID: 0xabcd
+[INFO: Main      ] - 802.15.4 Default channel: 26
+[INFO: Main      ] Node ID: 1
+[INFO: Main      ] Link-layer address: 0000.0000.0000.0001
+[INFO: Main      ] Tentative link-local IPv6 address: fe80::200:0:0:1
+[INFO: CC2538DK  ] TI SmartRF06 + cc2538EM
+decrypt, 144641,144648
+encrypt, 144790,144800
+htfin:144809
+#,#decrypt, 144961,144967
+encrypt, 144974,144980
+encrypt, 147848,147854
+encrypt, 168009,168016
+encrypt, 188170,188177
+encrypt, 208332,208338
+encrypt, 228493,228503
+encrypt, 248654,248664
+encrypt, 268816,268825
+encrypt, 288977,288987
+encrypt, 309138,309148
+encrypt, 329300,329309
+
+Energest:
+ CPU             0s LPM         9s DEEP LPM    0s  Total time 10s
+ Radio LISTEN   10s TRANSMIT    0s OFF         0s
+decrypt, 337406,337412
+encrypt, 337419,337429
+encrypt, 349461,349470
+encrypt, 369622,369632
+encrypt, 389783,389793
+encrypt, 409945,409954
+encrypt, 430106,430116
+encrypt, 450267,450277
+encrypt, 470429,470438
+encrypt, 490590,490596
+encrypt, 510751,510758
+decrypt, 510835,510841
+encrypt, 530909,530922
+encrypt, 551070,551083
+encrypt, 571232,571245
+encrypt, 591393,591406
+encrypt, 611554,611567
+encrypt, 631716,631729
+encrypt, 651877,651890
+
+Energest:
+ CPU             0s LPM        19s DEEP LPM    0s  Total time 20s
+ Radio LISTEN   20s TRANSMIT    0s OFF         0s
+decrypt, 664016,664022
+encrypt, 664032,664041
+encrypt, 672038,672051
+encrypt, 692200,692212
+encrypt, 712361,712374
+encrypt, 732522,732535
+encrypt, 752683,752696
+encrypt, 772845,772858
+encrypt, 793006,793019
+=,=
+encrypt, 813167,813180
+encrypt, 833329,833335
+encrypt, 853490,853496
+encrypt, 873651,873658
+encrypt, 893809,893819
+decrypt, 893890,893896
+encrypt, 913970,913980
+encrypt, 934132,934141
+encrypt, 954293,954303
+encrypt, 974454,974464
+
+Energest:
+ CPU             0s LPM        29s DEEP LPM    0s  Total time 30s
+ Radio LISTEN   30s TRANSMIT    0s OFF         0s
+decrypt, 990625,990632
+encrypt, 990638,990648
+encrypt, 994616,994625
+encrypt, 1014777,1014787
+encrypt, 1034938,1034948
+encrypt, 1055100,1055109
+encrypt, 1075261,1075270
+encrypt, 1095422,1095432
+encrypt, 1115583,1115593
+encrypt, 1135745,1135754
+encrypt, 1155906,1155916
+encrypt, 1176067,1176077
+encrypt, 1196229,1196238
+encrypt, 1216390,1216400
+encrypt, 1236551,1236561
+encrypt, 1256712,1256722
+encrypt, 1276874,1276883
+decrypt, 1276964,1276970
+encrypt, 1297035,1297045
+encrypt, 1317196,1317206
+
+Energest:
+ CPU             0s LPM        39s DEEP LPM    0s  Total time 40s
+ Radio LISTEN   40s TRANSMIT    0s OFF         0s
+decrypt, 1321267,1321274
+encrypt, 1321283,1321293
+encrypt, 1337358,1337367
+encrypt, 1357516,1357529

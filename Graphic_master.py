@@ -47,6 +47,7 @@ def graphic_data_subplot(data,name,namedata,xtitles=ciphers2,ranges=[[[],[]],[[]
         meanarray.append(mean)
         errorarray.append(error)
         #print(len(errorarray),len(meanarray))
+        print("Media"+name,meanarray)
         bar_plots.append(go.Bar(x=xtitles,y=mean,name=namedata[i],text=mean,textposition="outside",texttemplate='%{value:.3f}',error_y=dict(type='data',array=error)))
     #htmean,hterror = get_mean_error(securetimeslinkht)
     #bar_plots=[
@@ -110,8 +111,9 @@ def graphic_data(data,name,namedata,xtitles=ciphers2,ranges=[[],[]]):
     #    read=csv.reader(decv)
     #    securetimeslinkht=[list(map(float,x)) for x in list(read)]
         #print(i)
-        #print(datarray[-1])
+       
         mean,error = get_mean_error(datarray)
+        print(namedata[i],mean)
         meanarray.append(mean)
         errorarray.append(error)
         bar_plots.append(go.Bar(x=x,y=mean,name=namedata[i],text=mean,texttemplate='%{value:.3f}',textposition="outside",error_y=dict(type='data',array=error)))
@@ -182,7 +184,9 @@ def plot_size_image_subplot(files,title,platforms,ranges):
         print(textvs)
         romusage=textvs+datavs
         ramusage=datavs+bssvs
-
+        print(title)
+        print("uso de RAM",ramusage)
+        print("uso de ROM",romusage)
         barplots.append(go.Bar(x=ciphers,y=ramusage,text=ramusage,textposition='auto',name=platforms[filei],marker_color=clors[filei]))
         barplots.append(go.Bar(x=ciphers,y=romusage,text=romusage,textposition='auto',name=platforms[filei],marker_color=clors[filei]))
         # Make the multi-bar plot
@@ -228,36 +232,36 @@ if __name__ == "__main__":
 
     #plot_size_image_subplot("data_results/sizes_optim2.dat","Tamaño de las imagenes para cc2538")
     #plot_size_image_subplot("data_results/sizes_optim.dat","Tamaño de las imagenes para cc2538")
-    # ranges=[[16500, 17500],[50000, 130000]]
-    # plot_size_image_subplot(["data_results/sizes_Renode_04_14_2021_22:03:15.dat",
-    #                         #"data_results/sizes_Cooja_04_14_2021_21:52:41.dat",
-    #                         "data_results/sizes_Sensortag_04_14_2021_21:59:49.dat"],
-    #                         "Tamaño de las imagenes optimizadas para cc2538 (Renode) y Sensortag cc2650",
-    #                         ["Renode","Sensortag"],ranges)
-    # ranges=[[16500, 100000],[50000, 350000]]
-    # plot_size_image_subplot(["data_results/sizes_Cooja_04_14_2021_21:52:41.dat"],"Tamaño de las imagenes para cooja",["Cooja"],ranges)
-    ##plot_size_image_subplot(["data_results/sizes_Sensortag_04_14_2021_21:59:49.dat"],"Tamaño de las imagenes optimizadas para Sensortag",["Sensortag"])
+    ranges=[[16500, 17500],[50000, 130000]]
+    plot_size_image_subplot(["data_results/sizes_Renode_04_14_2021_22:03:15.dat",
+                            #"data_results/sizes_Cooja_04_14_2021_21:52:41.dat",
+                            "data_results/sizes_Sensortag_04_14_2021_21:59:49.dat"],
+                            "Tamaño de las imagenes optimizadas para cc2538 (Renode) y Sensortag cc2650",
+                            ["Renode","Sensortag"],ranges)
+    ranges=[[16500, 100000],[50000, 350000]]
+    plot_size_image_subplot(["data_results/sizes_Cooja_04_14_2021_21:52:41.dat"],"Tamaño de las imagenes para cooja",["Cooja"],ranges)
+    #plot_size_image_subplot(["data_results/sizes_Sensortag_04_14_2021_21:59:49.dat"],"Tamaño de las imagenes optimizadas para Sensortag",["Sensortag"])
 
-
-    # file_list=[
-    #     ["data_results/veldecryptpruebaRenode04_15_2021_16:04:57.dat",],
-    #     ["data_results/velencryptpruebaRenode04_15_2021_16:04:57.dat",]
-    # ]
-    # namedata=[
-    #     "Descencriptar",
-    #     "Encriptar"
-    # ]
-    # graphic_data(file_list,"Velocidad Optimizado cc2538(Renode)",namedata,ciphers)
 
     file_list=[
-        ["data_results/veldecryptpruebaSensortag04_15_2021_17:13:12.dat",],
-        ["data_results/velencryptpruebaSensortag04_15_2021_17:13:12.dat",]
+        ["data_results/veldecryptpruebaRenode04_15_2021_16:04:57.dat",],
+        ["data_results/velencryptpruebaRenode04_15_2021_16:04:57.dat",]
     ]
     namedata=[
         "Descencriptar",
         "Encriptar"
     ]
-    graphic_data(file_list,"Velocidad Optimizado cc2650(Sensortag)",namedata,ciphers,ranges=[1,2])
+    graphic_data(file_list,"Velocidad Optimizado cc2538(Renode)",namedata,ciphers)
+
+    # file_list=[
+    #     ["data_results/veldecryptpruebaSensortag04_15_2021_17:13:12.dat",],
+    #     ["data_results/velencryptpruebaSensortag04_15_2021_17:13:12.dat",]
+    # ]
+    # namedata=[
+    #     "Descencriptar",
+    #     "Encriptar"
+    # ]
+    # graphic_data(file_list,"Velocidad Optimizado cc2650(Sensortag)",namedata,ciphers,ranges=[1,2])
 
     # file_list=[
     #     ["data_results/veldecryptpruebaSensortag04_16_2021_00:52:37.dat",],
@@ -269,15 +273,15 @@ if __name__ == "__main__":
     # ]
     # graphic_data(file_list,"Velocidad cc2650(Sensortag)",namedata,ciphers3)
 
-    # file_list=[
-    #     ["data_results/veldecryptpruebaRenode04_15_2021_22:46:08.dat",],
-    #     ["data_results/velencryptpruebaRenode04_15_2021_22:46:08.dat",]
-    # ]
-    # namedata=[
-    #     "Descencriptar",
-    #     "Encriptar"
-    # ]
-    # graphic_data(file_list,"Velocidad cc2538(Renode)",namedata,ciphers)
+    file_list=[
+        ["data_results/veldecryptpruebaRenode04_15_2021_22:46:08.dat",],
+        ["data_results/velencryptpruebaRenode04_15_2021_22:46:08.dat",]
+    ]
+    namedata=[
+        "Descencriptar",
+        "Encriptar"
+    ]
+    graphic_data(file_list,"Velocidad cc2538(Renode)",namedata,ciphers)
 
     
 
@@ -301,38 +305,38 @@ if __name__ == "__main__":
     #     "Enlace seguro",
     #     "Handshake"
     # ]
-    # graphic_data(file_list,"Enlace seguro 5 muestras renode 1 salto",namedata,ciphers)
+    # #graphic_data(file_list,"Enlace seguro 5 muestras renode 1 salto",namedata,ciphers)
     # graphic_data_subplot(file_list,"Enlace seguro 5 muestras renode 1 salto",namedata,ciphers)
 
-    file_list=[
-        ["data_results/secure_link_Cooja_1_salto_04_14_2021_23:53:33.dat",
-        "data_results/secure_link_Cooja_1_salto_04_15_2021_00:04:08.dat",
-        "data_results/secure_link_Cooja_1_salto_04_15_2021_00:14:43.dat"],
-        ["data_results/secure_link_ht_Cooja_1_salto_04_14_2021_23:53:33.dat",
-        "data_results/secure_link_ht_Cooja_1_salto_04_15_2021_00:04:08.dat",
-        "data_results/secure_link_ht_Cooja_1_salto_04_15_2021_00:14:43.dat"]
-    ]
-    namedata=[
-        "Enlace seguro",
-        "Handshake"
-    ]
-    #graphic_data(file_list,"Enlace seguro 10 muestras cooja 1 salto",namedata)
-    graphic_data_subplot(file_list,"Enlace seguro 100 muestras cooja 1 salto",namedata,ranges=[[14539,14541],[281,282]])
+    # file_list=[
+    #     ["data_results/secure_link_Cooja_1_salto_04_14_2021_23:53:33.dat",
+    #     "data_results/secure_link_Cooja_1_salto_04_15_2021_00:04:08.dat",
+    #     "data_results/secure_link_Cooja_1_salto_04_15_2021_00:14:43.dat"],
+    #     ["data_results/secure_link_ht_Cooja_1_salto_04_14_2021_23:53:33.dat",
+    #     "data_results/secure_link_ht_Cooja_1_salto_04_15_2021_00:04:08.dat",
+    #     "data_results/secure_link_ht_Cooja_1_salto_04_15_2021_00:14:43.dat"]
+    # ]
+    # namedata=[
+    #     "Enlace seguro",
+    #     "Handshake"
+    # ]
+    # #graphic_data(file_list,"Enlace seguro 10 muestras cooja 1 salto",namedata)
+    # graphic_data_subplot(file_list,"Enlace seguro 100 muestras cooja 1 salto",namedata,ranges=[[14539,14541],[281,282]])
 
-    file_list=[
-        ["data_results/secure_link_Cooja_2_salto_04_15_2021_00:47:24.dat",
-        "data_results/secure_link_Cooja_2_salto_04_15_2021_00:58:25.dat",
-        "data_results/secure_link_Cooja_2_salto_04_15_2021_01:09:29.dat"],
-        ["data_results/secure_link_ht_Cooja_2_salto_04_15_2021_00:47:24.dat",
-        "data_results/secure_link_ht_Cooja_2_salto_04_15_2021_00:58:25.dat",
-        "data_results/secure_link_ht_Cooja_2_salto_04_15_2021_01:09:29.dat"]
-    ]
-    namedata=[
-        "Enlace seguro",
-        "Handshake"
-    ]
-    #graphic_data(file_list,"Enlace seguro 10 muestras cooja 2 salto",namedata)
-    graphic_data_subplot(file_list,"Enlace seguro 100 muestras cooja 2 saltos",namedata,ranges=[[29907,29908],[670,675]])
+    # file_list=[
+    #     ["data_results/secure_link_Cooja_2_salto_04_15_2021_00:47:24.dat",
+    #     "data_results/secure_link_Cooja_2_salto_04_15_2021_00:58:25.dat",
+    #     "data_results/secure_link_Cooja_2_salto_04_15_2021_01:09:29.dat"],
+    #     ["data_results/secure_link_ht_Cooja_2_salto_04_15_2021_00:47:24.dat",
+    #     "data_results/secure_link_ht_Cooja_2_salto_04_15_2021_00:58:25.dat",
+    #     "data_results/secure_link_ht_Cooja_2_salto_04_15_2021_01:09:29.dat"]
+    # ]
+    # namedata=[
+    #     "Enlace seguro",
+    #     "Handshake"
+    # ]
+    # #graphic_data(file_list,"Enlace seguro 10 muestras cooja 2 salto",namedata)
+    # graphic_data_subplot(file_list,"Enlace seguro 100 muestras cooja 2 saltos",namedata,ranges=[[29907,29908],[670,675]])
 
     file_list=[
         ["data_results/secure_link_Renode_1_salto_04_07_2021_20:47:53.dat",
@@ -376,52 +380,52 @@ if __name__ == "__main__":
         "Handshake"
     ]
     #graphic_data(file_list,"Enlace seguro 10x10 muestras sensortag 2 saltos",namedata)
-    graphic_data_subplot(file_list,"Enlace seguro 10x10 muestras renode 2 saltos",namedata,xtitles=ciphers,ranges=[[8288,8295],[42,47]])
+    graphic_data_subplot(file_list,"Enlace seguro 10x10 muestras renode 2 saltos",namedata,xtitles=ciphers2,ranges=[[8288,8295],[42,47]])
 
 
-    file_list=[
-        ["data_results/securelinktiming1_tag_3.dat",
-        ],
-        ["data_results/securelinktiminght1_tag_3.dat",
-        ]
-    ]
-    namedata=[
-        "Enlace seguro",
-        "Handshake"
-    ]
-    #graphic_data(file_list,"Enlace seguro 10x10 muestras sensortag 2 saltos",namedata)
-    graphic_data_subplot(file_list,"Enlace seguro 10x10 muestras sensortag 1 saltos",namedata,ranges=[[10000,20000],[300,610]])
+    # file_list=[
+    #     ["data_results/securelinktiming1_tag_3.dat",
+    #     ],
+    #     ["data_results/securelinktiminght1_tag_3.dat",
+    #     ]
+    # ]
+    # namedata=[
+    #     "Enlace seguro",
+    #     "Handshake"
+    # ]
+    # #graphic_data(file_list,"Enlace seguro 10x10 muestras sensortag 2 saltos",namedata)
+    # graphic_data_subplot(file_list,"Enlace seguro 10x10 muestras sensortag 1 saltos",namedata,ranges=[[10000,20000],[300,610]])
 
-    file_list=[
-        ["data_results/secure_link_Sensortag_2_salto_04_13_2021_12:54:29.dat",
-        "data_results/secure_link_Sensortag_2_salto_04_13_2021_14:26:00.dat",
-        "data_results/secure_link_Sensortag_2_salto_04_13_2021_15:57:35.dat",
-        "data_results/secure_link_Sensortag_2_salto_04_13_2021_17:29:14.dat",
-        "data_results/secure_link_Sensortag_2_salto_04_13_2021_19:00:55.dat",
-        "data_results/secure_link_Sensortag_2_salto_04_13_2021_20:32:39.dat",
-        "data_results/secure_link_Sensortag_2_salto_04_13_2021_22:04:21.dat",
-        "data_results/secure_link_Sensortag_2_salto_04_13_2021_23:36:11.dat",
-        "data_results/secure_link_Sensortag_2_salto_04_14_2021_01:08:14.dat",
-        "data_results/secure_link_Sensortag_2_salto_04_14_2021_02:40:07.dat"
-        ],
-        ["data_results/secure_link_ht_Sensortag_2_salto_04_13_2021_12:54:29.dat",
-        "data_results/secure_link_ht_Sensortag_2_salto_04_13_2021_14:26:00.dat",
-        "data_results/secure_link_ht_Sensortag_2_salto_04_13_2021_15:57:35.dat",
-        "data_results/secure_link_ht_Sensortag_2_salto_04_13_2021_17:29:14.dat",
-        "data_results/secure_link_ht_Sensortag_2_salto_04_13_2021_19:00:55.dat",
-        "data_results/secure_link_ht_Sensortag_2_salto_04_13_2021_20:32:39.dat",
-        "data_results/secure_link_ht_Sensortag_2_salto_04_13_2021_22:04:21.dat",
-        "data_results/secure_link_ht_Sensortag_2_salto_04_13_2021_23:36:11.dat",
-        "data_results/secure_link_ht_Sensortag_2_salto_04_14_2021_01:08:14.dat",
-        "data_results/secure_link_ht_Sensortag_2_salto_04_14_2021_02:40:07.dat"
-        ]
-    ]
-    namedata=[
-        "Enlace seguro",
-        "Handshake"
-    ]
-    #graphic_data(file_list,"Enlace seguro 10x10 muestras sensortag 2 saltos",namedata)
-    graphic_data_subplot(file_list,"Enlace seguro 10x10 muestras sensortag 2 saltos",namedata,ranges=[[20000,33000],[600,1500]])
+    # file_list=[
+    #     ["data_results/secure_link_Sensortag_2_salto_04_13_2021_12:54:29.dat",
+    #     "data_results/secure_link_Sensortag_2_salto_04_13_2021_14:26:00.dat",
+    #     "data_results/secure_link_Sensortag_2_salto_04_13_2021_15:57:35.dat",
+    #     "data_results/secure_link_Sensortag_2_salto_04_13_2021_17:29:14.dat",
+    #     "data_results/secure_link_Sensortag_2_salto_04_13_2021_19:00:55.dat",
+    #     "data_results/secure_link_Sensortag_2_salto_04_13_2021_20:32:39.dat",
+    #     "data_results/secure_link_Sensortag_2_salto_04_13_2021_22:04:21.dat",
+    #     "data_results/secure_link_Sensortag_2_salto_04_13_2021_23:36:11.dat",
+    #     "data_results/secure_link_Sensortag_2_salto_04_14_2021_01:08:14.dat",
+    #     "data_results/secure_link_Sensortag_2_salto_04_14_2021_02:40:07.dat"
+    #     ],
+    #     ["data_results/secure_link_ht_Sensortag_2_salto_04_13_2021_12:54:29.dat",
+    #     "data_results/secure_link_ht_Sensortag_2_salto_04_13_2021_14:26:00.dat",
+    #     "data_results/secure_link_ht_Sensortag_2_salto_04_13_2021_15:57:35.dat",
+    #     "data_results/secure_link_ht_Sensortag_2_salto_04_13_2021_17:29:14.dat",
+    #     "data_results/secure_link_ht_Sensortag_2_salto_04_13_2021_19:00:55.dat",
+    #     "data_results/secure_link_ht_Sensortag_2_salto_04_13_2021_20:32:39.dat",
+    #     "data_results/secure_link_ht_Sensortag_2_salto_04_13_2021_22:04:21.dat",
+    #     "data_results/secure_link_ht_Sensortag_2_salto_04_13_2021_23:36:11.dat",
+    #     "data_results/secure_link_ht_Sensortag_2_salto_04_14_2021_01:08:14.dat",
+    #     "data_results/secure_link_ht_Sensortag_2_salto_04_14_2021_02:40:07.dat"
+    #     ]
+    # ]
+    # namedata=[
+    #     "Enlace seguro",
+    #     "Handshake"
+    # ]
+    # #graphic_data(file_list,"Enlace seguro 10x10 muestras sensortag 2 saltos",namedata)
+    # graphic_data_subplot(file_list,"Enlace seguro 10x10 muestras sensortag 2 saltos",namedata,ranges=[[20000,33000],[600,1500]])
 
 
     # file_list=[

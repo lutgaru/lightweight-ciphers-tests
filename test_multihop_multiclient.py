@@ -42,17 +42,17 @@ def server():
     asyncio.get_event_loop().run_forever()
 
 async def saction(action):
-    async with websockets.connect('ws://192.168.0.4:8765') as websocket:
+    async with websockets.connect('ws://192.168.0.4:8765',ping_interval=None) as websocket:
 
         await websocket.send(action)
         print("> {}".format(action))
 
         greeting = await websocket.recv()
         print("< {}".format(greeting))
-    return(greeting)
+    #return(greeting)
 
 def sendaction(action):
-    asyncio.get_event_loop().run_until_complete(saction(action))
+    return asyncio.get_event_loop().run_until_complete(saction(action))
 
 if __name__ == "__main__":    
     server()

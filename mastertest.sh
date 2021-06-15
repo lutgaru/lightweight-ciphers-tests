@@ -19,7 +19,7 @@ git submodule update --remote
 make clean
 case "$1" in
     1)
-        make MAKE_WITH_GIFTCOFB=1 && sudo make install #|| exit_on_error "fallo la instalacion de libcoap"
+        make MAKE_WITH_GIFTCOFB=1  NBYTES=3 && sudo make install #|| exit_on_error "fallo la instalacion de libcoap"
         ;;
     2)
         make MAKE_WITH_XOODYAK=1 && sudo make install #|| exit_on_error "fallo la instalacion de libcoap"

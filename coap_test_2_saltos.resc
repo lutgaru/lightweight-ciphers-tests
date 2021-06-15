@@ -23,9 +23,9 @@ emulation CreateWirelessMedium "wireless"
 # The radio is using a range-based medium (with the `Range` set to `11`)
 # If not set, the default SimpleMediumFunction will be used (where range is not relevant)
 wireless SetRangeWirelessFunction 11
-#emulation LogWirelessTraffic
+emulation LogWirelessTraffic
 ######################### COAP SERVER - begin #########################
-$bin=@contiki-ng/examples/coap/coap-example-server/coap-example-server.cc2538dk
+$bin=@contiki-ng/examples/coap_cipher_net_sec/coap-example-server/coap-example-server.cc2538dk
 $name="server"
 i $ORIGIN/cc2538-node.resc
 connector Connect radio wireless
@@ -38,7 +38,7 @@ mach clear
 ########################## UDP SERVER - end ##########################
 
 ######################### COAP SERVER2 - begin #########################
-$bin=@contiki-ng/examples/coap/coap-example-server/coap-example-server.cc2538dk
+$bin=@contiki-ng/examples/coap_cipher_net_sec/coap-example-server/coap-example-server.cc2538dk
 $name="server2"
 i $ORIGIN/cc2538-node.resc
 connector Connect radio wireless
@@ -51,7 +51,7 @@ mach clear
 ########################## UDP SERVER2 - end ##########################
 
 ######################### COAP CLIENT - begin #########################
-$bin=@contiki-ng/examples/coap/coap-example-client/coap-example-client.cc2538dk
+$bin=@contiki-ng/examples/coap_cipher_net_sec/coap-example-client/coap-example-client.cc2538dk
 $name="client"
 i $ORIGIN/cc2538-node.resc
 connector Connect radio wireless
