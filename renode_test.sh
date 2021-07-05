@@ -47,8 +47,8 @@ case "$1" in
         ;;
 esac
 }
-serverdir=contiki-ng/examples/coap_cipher_vel_test/coap-example-server
-clientdir=contiki-ng/examples/coap_cipher_vel_test/coap-example-client
+serverdir=contiki-ng/examples/coap_cipher_vel_test_final/coap-example-server
+clientdir=contiki-ng/examples/coap_cipher_vel_test_final/coap-example-client
 cd $clientdir
 compile $1 $2 
 cd ../../../../

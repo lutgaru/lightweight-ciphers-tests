@@ -5,6 +5,7 @@ import subprocess
 
 class renode:
     segundo=32768
+    nombre='renode'
 
     def make(self,defines='',with_clean=1,withoptim=1, args=''):
         #print(with_clean)
@@ -18,10 +19,10 @@ class renode:
         print(command)
         return os.system(command)
 
-    def run(self,program=1):
+    def run(self,program=1,sleep=120):
         renoder = subprocess.Popen(["renode", "--disable-xwt", "coap_test.resc", "--port", "33334"])
         print("Esperando..")
-        time.sleep(120)
+        time.sleep(sleep)
         tn = Telnet("127.0.0.1",33334)
         tn.write("quit\n".encode('ascii'))
         tn.close()

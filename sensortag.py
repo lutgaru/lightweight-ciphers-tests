@@ -8,12 +8,15 @@ import test_multihop_multiclient
 class sensortag:
 
     segundo=65536
+    nombre='sensortag'
 
     def make(self,defines='',with_clean=1,withoptim=1, args=''):
         if with_clean==1:
             os.system("make TARGET=cc26x0-cc13x0 clean")
         if withoptim:
             defines=defines+' WITH_OPTIMIZATION=1 '
+        if args:
+            defines=defines+args
         command="make TARGET=cc26x0-cc13x0 BOARD=sensortag/cc2650 WERROR=0 " +defines+ " MAKE_WITH_DTLS=1 MAKE_COAP_DTLS_KEYSTORE=MAKE_COAP_DTLS_KEYSTORE_SIMPLE"
         print(command)
         return os.system(command)
@@ -40,13 +43,13 @@ class sensortag:
         f.close()
         ser.close()
     
-    def run(self,program=1,local=1):
+    def run(self,program=1,local=1,sleep=300):
         if local:
             dir_path = os.path.dirname(os.path.realpath(__file__))
             os.chdir(dir_path)
             if(program):
-                exito1=os.system("/opt/ti/uniflash/dslite.sh -c cliente.ccxml -f contiki-ng/examples/coap_cipher_vel_test/coap-example-client/build/cc26x0-cc13x0/sensortag/cc2650/coap-example-client.hex")
-                exito2=os.system("/opt/ti/uniflash/dslite.sh -c server.ccxml -f contiki-ng/examples/coap_cipher_vel_test/coap-example-server/build/cc26x0-cc13x0/sensortag/cc2650/coap-example-server.hex")
+                exito1=os.system("/opt/ti/uniflash/dslite.sh -c cliente.ccxml -f contiki-ng/examples/coap_cipher_vel_test_final/coap-example-client/build/cc26x0-cc13x0/sensortag/cc2650/coap-example-client.hex")
+                exito2=os.system("/opt/ti/uniflash/dslite.sh -c server.ccxml -f contiki-ng/examples/coap_cipher_vel_test_final/coap-example-server/build/cc26x0-cc13x0/sensortag/cc2650/coap-example-server.hex")
                 if (exito1!=0 or exito2!=0):
                     return -1
             time.sleep(0.2)
