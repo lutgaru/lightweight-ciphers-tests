@@ -24,7 +24,7 @@ import numpy as np
 from telnetlib import Telnet
 AES, GIFTCOFB, XOODYAK, ASCON128A, ASCON80, ASCON128, GRAIN128, TINYJAMBU192, TINYJAMBU256, TINYJAMBU128 = range(10)
 ciphers=['AES',' GIFTCOFB',' XOODYAK',' ASCON128A',' ASCON80',' ASCON128',' TINYJAMBU192',' TINYJAMBU256',' TINYJAMBU128']
-ciphersst=['AES',' GIFTCOFB',' XOODYAK',' TINYJAMBU192',' TINYJAMBU256',' TINYJAMBU128']
+ciphersst=['AES',' GIFTCOFB',' XOODYAK',' TINYJAMBU192',' TINYJAMBU256',' TINYJAMBU128','NOCIP']
 carpetas=['sensortagstdtesttable','sensortagstdtestconst','sensortag1s']
 
 empaquetado=[1,6,9]
@@ -162,6 +162,131 @@ def graphic_vel_cipher_sensortag(platform):
     #axs.set_title("Velcidad de cifrado y decifrado")
     plt.show()          
 
+def extract_power(list):
+    times=[]
+    for i in range(len(list)-1):
+        times.append(int(list[i+1])-int(list[i]))
+    #print(times,list)
+    return times
+
+def extract_energy():
+    timetest=600
+    carp=carpetas[0]
+    fig,axs=plt.subplots(1)
+    for i,pack in enumerate(empaquetado):
+            clientcpus=[]
+            clientlpms=[]
+            clientdeplpms=[]
+            clienttotalcpus=[]
+            clientlistens=[]
+            clienttransmits=[]
+            clientrtotals=[]
+            #for pack in empaquetado:
+            for k,cip in enumerate(ciphersst):
+                clientcpu=[]
+                clientlpm=[]
+                clientdeplpm=[]
+                clienttotalcpu=[]
+                clientlisten=[]
+                clienttransmit=[]
+                clientrtotal=[]
+                with open('final_logs/'+carp+'/clientloguart_'+cip+'_'+str(pack)+'_'+str(timetest)+'.dat',"r", errors='ignore') as decv:
+                     clientlines=decv.readlines()
+                with open('final_logs/'+carp+'/clientloguart_'+cip+'_'+str(pack)+'_'+str(timetest)+'.dat',"r", errors='ignore') as decv:
+                     oximlines=decv.readlines()
+                inicio=False
+                for clientline in clientlines:
+                    linea=clientline.split(',')
+                    if linea[0]!='[INFO: CC26xx/CC13xx]  RF: Channel 26' and inicio==False:
+                            #print(linesp)
+                            continue
+                    inicio=True
+                    if linea[0]=='EC':
+                        clientcpu.append(int(linea[1]))
+                        clientlpm.append(int(linea[2]))
+                        clientdeplpm.append(int(linea[3]))
+                        clienttotalcpu.append(int(linea[4]))
+                        #print(linea)
+                    if linea[0]=='ER':
+                        clientlisten.append(int(linea[1]))
+                        clienttransmit.append(int(linea[2]))
+                        clientrtotal.append(int(linea[3]))
+                        #print(linea)
+                #print(clientlpm)
+                clientcpus.append(clientcpu)
+                clientlpms.append(clientlpm)
+                clientdeplpms.append(clientdeplpm)
+                clienttotalcpus.append(clienttotalcpu)
+                clientlistens.append(clientlisten)
+                clienttransmits.append(clienttransmit)
+                clientrtotals.append(clientrtotal)
+                #print(clienttotalcpu)
+            print([np.std(extract_power(x)) for x in clienttotalcpus])
+            axs.errorbar(ciphersst,[np.mean(extract_power(x)) for x in clientlistens],yerr=[np.std(extract_power(x)) for x in clientlistens],fmt='v:',label=str(pack)+" crypt", capsize=3, capthick=1)
+            #exit()
+    plt.show()
+            #print(clienttransmits)
+
+def extract_times():
+    timetest=600
+    carp=carpetas[0]
+    fig,axs=plt.subplots(1)
+    for i,pack in enumerate(empaquetado):
+            clientcpus=[]
+            clientlpms=[]
+            clientdeplpms=[]
+            clienttotalcpus=[]
+            clientlistens=[]
+            clienttransmits=[]
+            clientrtotals=[]
+            #for pack in empaquetado:
+            for k,cip in enumerate(ciphersst):
+                clientcpu=[]
+                clientlpm=[]
+                clientdeplpm=[]
+                clienttotalcpu=[]
+                clientlisten=[]
+                clienttransmit=[]
+                clientrtotal=[]
+                with open('final_logs/'+carp+'/clientloguart_'+cip+'_'+str(pack)+'_'+str(timetest)+'.dat',"r", errors='ignore') as decv:
+                     clientlines=decv.readlines()
+                with open('final_logs/'+carp+'/clientloguart_'+cip+'_'+str(pack)+'_'+str(timetest)+'.dat',"r", errors='ignore') as decv:
+                     oximlines=decv.readlines()
+                inicio=False
+                for clientline in clientlines:
+                    linea=clientline.split(',')
+                    if linea[0]!='[INFO: CC26xx/CC13xx]  RF: Channel 26' and inicio==False:
+                            #print(linesp)
+                            continue
+                    inicio=True
+                    if linea[0]=='EC':
+                        clientcpu.append(int(linea[1]))
+                        clientlpm.append(int(linea[2]))
+                        clientdeplpm.append(int(linea[3]))
+                        clienttotalcpu.append(int(linea[4]))
+                        #print(linea)
+                    if linea[0]=='ER':
+                        clientlisten.append(int(linea[1]))
+                        clienttransmit.append(int(linea[2]))
+                        clientrtotal.append(int(linea[3]))
+                        #print(linea)
+                #print(clientlpm)
+                clientcpus.append(clientcpu)
+                clientlpms.append(clientlpm)
+                clientdeplpms.append(clientdeplpm)
+                clienttotalcpus.append(clienttotalcpu)
+                clientlistens.append(clientlisten)
+                clienttransmits.append(clienttransmit)
+                clientrtotals.append(clientrtotal)
+                #print(clienttotalcpu)
+            print([np.std(extract_power(x)) for x in clienttotalcpus])
+            axs.errorbar(ciphersst,[np.mean(extract_power(x)) for x in clientlistens],yerr=[np.std(extract_power(x)) for x in clientlistens],fmt='v:',label=str(pack)+" crypt", capsize=3, capthick=1)
+            #exit()
+    plt.show()
+            #print(clienttransmits)
+
+
 #platform=renode.renode()
 platform=sensortag.sensortag()
-graphic_vel_cipher_sensortag(platform)
+#graphic_vel_cipher_sensortag(platform)
+extract_energy()
