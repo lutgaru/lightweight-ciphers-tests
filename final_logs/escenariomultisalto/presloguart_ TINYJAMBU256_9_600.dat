@@ -1,0 +1,48 @@
+152514
+EC, 300,62755,   0,63056
+ER,63035,  11,   8
+EC, 303,63752,   0,64056
+ER,64036,  11,   8
+encrypt, 41988642,41988654
+S,11146,41988640,0,0,41988826
+EC, 308,64748,   0,65057
+ER,65036,  12,   8
+EC, 313,65744,   0,66057
+ER,66037,  12,   8
+encrypt, 43660830,43660842
+S,11146,43660828,0,0,43661014
+EC, 327,66730,   0,67058
+ER,67013,  36,   8
+[INFO: Main      ] Starting Contiki-NG-release/v4.6-70-g9ff7b4bdb-dirty
+[INFO: Main      ] - Routing: RPL Lite
+[INFO: Main      ] - Net: sicslowpan
+[INFO: Main      ] - MAC: CSMA
+[INFO: Main      ] - 802.15.4 PANID: 0xabcd
+[INFO: Main      ] - 802.15.4 Default channel: 26
+[INFO: Main      [INFO: Main      ] Starting Contiki-NG-release/v4.6-70-g9ff7b4bdb-dirty
+[INFO: Main      ] - Routing: RPL Lite
+[INFO: Main      ] - Net: sicslowpan
+[INFO: Main      ] - MAC: CSMA
+[INFO: Main      ] - 802.15.4 PANID: 0xabcd
+[INFO: Main      ] - 802.15.4 Default channel: 26
+[INFO: Main      ] Node ID: 65491
+[INFO: Main      ] Link-layer address: 0012.4b00.1204.ffd3
+[INFO: Main      ] Tentative link-local IPv6 address: fe80::212:4b00:1204:ffd3
+[INFO: CC26xx/CC13xx] TI CC2650 SensorTag
+[INFO: CC26xx/CC13xx]  RF: Channel 26, PANID 0xABCD
+EC,  23, 998,   0,1021
+ER,1012,   0,   8
+decrypt, 1196826,1196838
+encrypt, 1197166,1197180
+htfin:1197338
+#,#decrypt, 1205016,1205030
+encrypt, 1205182,1205194
+p,19094,1205182,0,0,1205352
+EC,  29,1992,   0,2022
+ER,2010,   3,   8
+EC,  33,2989,   0,3022
+ER,3010,   4,   8
+EC,  38,3985,   0,4023
+ER,4010,   4,   8
+EC,  42,4981,   0,5024
+ER,5011,   4,   8

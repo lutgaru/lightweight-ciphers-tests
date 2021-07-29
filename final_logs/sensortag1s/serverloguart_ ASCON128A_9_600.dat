@@ -1,0 +1,93 @@
+ 97,31941,   0,32039
+ER,32026,   3,   8
+[INFO: Main      ] Starting Contiki-NG-release/v4.6-69-g3607926aa-dirty
+[INFO: Main      ] - Routing: RPL Lite
+[INFO: Main      ] - Net: sicslowpan
+[INFO: Main      ] - MAC: CSMA
+[INFO: Main      ] - 802.15.4 PANID: 0xabcd
+[INFO: Main      ] - 802.15.4 Default channel: 26
+[INFO: Main      ] Î[INFO: Main      ] Starting Contiki-NG-release/v4.6-69-g3607926aa-dirty
+[INFO: Main      ] - Routing: RPL Lite
+[INFO: Main      ] - Net: sicslowpan
+[INFO: Main      ] - MAC: CSMA
+[INFO: Main      ] - 802.15.4 PANID: 0xabcd
+[INFO: Main      ] - 802.15.4 Default channel: 26
+[INFO: Main      ] Node ID: 56581
+[INFO: Main      ] Link-layer address: 0012.4b00.0a55.dd05
+[INFO: Main      ] Tentative link-local IPv6 address: fe80::212:4b00:a55:dd05
+[INFO: CC26xx/CC13xx] TI CC2650 SensorTag
+[INFO: CC26xx/CC13xx]  RF: Channel 26, PANID 0xABCD
+EC,  23, 998,   0,1021
+ER,1012,   0,   8
+decrypt, 1120026,1120034
+encrypt, 1120360,1120370
+htfin:1120530
+#,#decrypt, 1126680,1126688
+encrypt, 1126842,1126850
+o,52505,1126840,0,0,1127008
+decrypt, 1130954,1130962
+[INFO: Main      ] Starting Contiki-NG-release/v4.6-69-g3607926aa-dirty
+[INFO: Main      ] - Routing: RPL Lite
+[INFO: Main      ] - Net: sicslowpan
+[INFO: Main      ] - MAC: CSMA
+[INFO: Main      ] - 802.15.4 PANID: 0xabcd
+[INFO: Main      ] - 802.15.4 Default channel: 26
+[INFO: Main      ] Node ID: 56581
+[INFO: Main      ] Link-layer address: 0012.4b00.0a55.dd05
+[INFO: Main      ] Tentative link-local IPv6 address: fe80::212:4b00:a55:dd05
+[INFO: CC26xx/CC13xx] TI CC2650 SensorTag
+[INFO: CC26xx/CC13xx]  RF: Channel 26, PANID 0xABCD
+EC,  23, 998,   0,1021
+ER,1013,   0,   8
+EC,  25,1996,   0,2022
+ER,2012,   1,   8
+EC,  28,2994,   0,3022
+ER,3012,   2,   8
+EC,  30,3992,   0,4023
+ER,4012,   2,   8
+EC,  32,4992,   0,5024
+ER,5013,   2,   8
+EC,  33,5990,   0,6024
+ER,6013,   2,   8
+EC,  35,6989,   0,7025
+ER,7014,   2,   8
+EC,  37,7988,   0,8025
+ER,8014,   2,   8
+EC,  39,8986,   0,9026
+ER,9014,   3,   8
+EC,  41,9985,   0,10026
+ER,10015,   3,   8
+EC,  43,10984,   0,11027
+ER,11015,   3,   8
+EC,  45,11982,   0,12027
+ER,12016,   3,   8
+EC,  47,12981,   0,13028
+ER,13017,   3,   8
+EC,  49,13979,   0,14028
+ER,14016,   3,   8
+EC,  50,14978,   0,15029
+ER,15017,   3,   8
+EC,  52,15977,   0,16030
+ER,16018,   3,   8
+EC,  54,16976,   0,17030
+ER,17018,   3,   8
+EC,  56,17974,   0,18031
+ER,18019,   3,   8
+EC,  58,18973,   0,19031
+ER,19020,   3,   8
+EC,  60,19972,   0,20032
+ER,20020,   3,   8
+EC,  62,20970,   0,21032
+ER,21021,   3,   8
+EC,  64,21969,   0,22033
+ER,22021,   3,   8
+EC,  66,22967,   0,23034
+ER,23021,   3,   8
+EC,  67,23966,   0,24034
+ER,24022,   3,   8
+EC,  69,24965,   0,25035
+ER,25022,   3,   8
+EC,  71,25963,   0,26035
+ER,26023,   3,   8
+EC,  73,26962,   0,27036
+ER,27024,   3,   8

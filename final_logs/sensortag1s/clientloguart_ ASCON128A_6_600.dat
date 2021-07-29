@@ -1,0 +1,98 @@
+ ] - Routing: RPL Lite
+[INFO: Main      ] - Net: sicslowpan
+[INFO: Main      ] - MAC: CSMA
+[INFO: Main      ] - 802.15.4 PANID: 0xabcd
+[INFO: Main      ] - 802.15.4 Default c[INFO: Main      ] Starting Contiki-NG-release/v4.6-69-g3607926aa-dirty
+[INFO: Main      ] - Routing: RPL Lite
+[INFO: Main      ] - Net: sicslowpan
+[INFO: Main      ] - MAC: CSMA
+[INFO: Main      ] - 802.15.4 PANID: 0xabcd
+[INFO: Main      ] - 802.15.4 Default channel: 26
+[INFO: Main      ] Node ID: 56377
+[INFO: Main      ] Link-layer address: 0012.4b00.1204.dc39
+[INFO: Main      ] Tentative link-local IPv6 address: fe80::212:4b00:1204:dc39
+[INFO: CC26xx/CC13xx] TI CC2650 SensorTag
+[INFO: CC26xx/CC13xx]  RF: Channel 26, PANID 0xABCD
+inicio:19304
+Press a button to request /test/hello
+ep: coaps://[fd00::212:4b00:a55:dd05], 0
+htinit:619886
+conectando..2
+encrypt, 626052,626060
+decrypt, 637934,637944
+htfin:638158
+#,#seguro 1: 638256
+encrypt, 638360,638370
+i,42850,638360,0,0,638520
+decrypt, 642552,642560
+|oximeter
+es un oximetro jeje
+encrypt, 642876,642884
+n,42851,642874,0,0,643034
+EC, 966,  55,   0,1021
+ER,1010,   2,   8
+encrypt, 849442,849450
+n,42851,849440,0,0,849600
+encrypt, 1261414,1261422
+n,42851,1261412,0,0,1261584
+EC, 967,1054,   0,2021
+ER,2009,   3,   8
+EC, 968,2054,   0,3022
+ER,3009,   4,   8
+encrypt, 2084878,2084886
+n,42851,2084876,0,0,2085048
+EC, 969,3053,   0,4023
+ER,4010,   4,   8
+EC, 970,4053,   0,5023
+ER,5010,   5,   8
+encrypt, 3731740,3731748
+n,42851,3731738,0,0,3731910
+EC, 971,5052,   0,6024
+ER,6010,   5,   8
+EC, 971,6053,   0,7025
+ER,7011,   5,   8
+EC, 972,7053,   0,8025
+ER,8011,   5,   8
+EC, 972,8053,   0,9026
+ER,9012,   5,   8
+EC, 973,9053,   0,10026
+ER,10012,   5,   8
+NO_REPLY_FROM_SERVER: removing observe registration with token 10
+EC, 974,10053,   0,11027
+ER,11013,   5,   8
+EC, 974,11053,   0,12028
+ER,12014,   5,   8
+EC, 975,12052,   0,13028
+ER,13014,   5,   8
+EC, 975,13052,   0,14028
+ER,14014,   5,   8
+EC, 976,14053,   0,15029
+ER,15015,   5,   8
+EC, 976,15053,   0,16029
+ER,16015,   5,   8
+EC, 977,16053,   0,17030
+ER,17016,   5,   8
+EC, 977,17053,   0,18031
+ER,18017,   5,   8
+EC, 978,18053,   0,19031
+ER,19017,   5,   8
+EC, 978,19053,   0,20032
+ER,20018,   5,   8
+EC, 979,20053,   0,21032
+ER,21018,   5,   8
+EC, 979,21053,   0,22033
+ER,22019,   5,   8
+EC, 980,22053,   0,23034
+ER,23019,   6,   8
+EC, 980,23053,   0,24034
+ER,24019,   6,   8
+EC, 981,24053,   0,25035
+ER,25020,   6,   8
+EC, 981,25053,   0,26035
+ER,26020,   6,   8
+EC, 982,26054,   0,27036
+ER,27021,   6,   8
+EC, 982,27053,   0,28036
+ER,28022,   6,   8
+EC, 983,28053,   0,29036
+ER,29022,   6,   8

@@ -1,0 +1,27 @@
+[INFO: Main      ] Starting Contiki-NG-release/v4.6-70-g9ff7b4bdb-dirty
+[INFO: Main      ] - Routing: RPL Lite
+[INFO: Main      ] - Net: sicslowpan
+[INFO: Main      ] - MAC: CSMA
+[INFO: Main      ] - 802.15.4 PANID: 0xabcd
+[INFO: Main      ] - 802.15.4 Default channel: 26
+[INFO: Main      ] Node ID: 56377
+[INFO: Main      ] Link-layer address: 0012.4b00.1204.dc39
+[INFO: Main      ] Tentative link-local IPv6 address: fe80::212:4b00:1204:dc39
+[INFO: CC26xx/CC13xx] TI CC2650 SensorTag
+[INFO: CC26xx/CC13xx]  RF: Channel 26, PANID 0xABCD
+decrypt, 552134,552148
+encrypt, 552464,552478
+htfin:552626
+#,#decrypt, 562886,562900
+encrypt, 563042,563054
+t,19091,563040,0,0,563200
+EC,  27, 994,   0,1021
+ER,1009,   3,   8
+EC,  29,1992,   0,2022
+ER,2009,   4,   8
+EC,  32,2990,   0,3022
+ER,3009,   4,   8
+EC,  35,3988,   0,4023
+ER,4010,   4,   8
+EC,  37,4986,   0,5024
+ER,5010,   4,   8
