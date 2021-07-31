@@ -11,6 +11,8 @@ from matplotlib.transforms import ScaledTranslation
 #import matplotlib.colors as colors
 import random
 import csv
+
+from numpy.core.fromnumeric import mean, std
 import sensortag
 import renode
 import cooja
@@ -21,6 +23,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import csv
 import numpy as np
+import pickle
 
 from telnetlib import Telnet
 AES, GIFTCOFB, XOODYAK, ASCON128A, ASCON80, ASCON128, GRAIN128, TINYJAMBU192, TINYJAMBU256, TINYJAMBU128 = range(10)
@@ -236,18 +239,16 @@ def extract_energy():
 def extract_times():
     timetest=600
     carp=carpetas[5]
-    #fig,axs=plt.subplots(1)
-    
-    for k,cip in enumerate([ciphersst[10]]):
+    medias=[]
+    jitters=[]
+    graphtimes=go.Figure()
+    tiemposfc=[]
+    for k,cip in enumerate(ciphersst):
         fig = go.Figure()
         difdel=go.Figure()
-        clientcpus=[]
-        clientlpms=[]
-        clientdeplpms=[]
-        clienttotalcpus=[]
-        clientlistens=[]
-        clienttransmits=[]
-        clientrtotals=[]
+        media=[]
+        jitter=[]
+        tiemposfp=[]
         #for pack in empaquetado:
         for iem,pack in enumerate(empaquetado):
             times=go.Figure()
@@ -277,7 +278,7 @@ def extract_times():
                     try:
                         tiempros.append(int(linea[5])-int(linea[2]))
                     except:
-                        continue
+                        pass
                     inicio2=False
                     for clientline in clientlines:
                         clinea=clientline.split(',')
@@ -294,13 +295,8 @@ def extract_times():
                             #     print(clinea,T_0s[-1])
                             #     print(oximline,T_1s[-1])
                             break
-                    
-            #print(clientlpm)
+            tiemposfp.append([T_0s,T_1s])        
             
-            #print(clienttotalcpu)
-        #print([np.std(extract_power(x)) for x in clienttotalcpus])
-        #axs.errorbar(ciphersst,[np.mean(extract_power(x)) for x in clientlistens],yerr=[np.std(extract_power(x)) for x in clientlistens],fmt='v:',label=str(pack)+" crypt", capsize=3, capthick=1)
-        #exit()
             timedif1=[]
             timedif2=[]
             for itime in range(len(T_1s)-1):
@@ -313,20 +309,65 @@ def extract_times():
             times.add_trace(go.Scatter(x=np.linspace(0,10,len(T_0s)),y=T_0s))
             times.add_trace(go.Scatter(x=np.linspace(0,10,len(T_0ds)),y=T_0ds))
             fig.add_trace(go.Scatter(x=np.linspace(0,10,len(tiempros)),y=tiempros))
-            difdel.add_trace(go.Scatter(x=np.linspace(0,10,len(timedif1)),y=timedif1))
+            difdel.add_trace(go.Scatter(x=np.linspace(0,10,len(timedif2)),y=timedif2))
+            media.append(np.mean(timedif2))
+            jitter.append(np.std(timedif2))
             #axs.plot(T_1s)
             #axs.plot(T_0s)
             #axs.plot(timedif1)
             #times.show()
+
             print(T_0s)
-    #plt.show()
+   
+        #difdel.add_trace(go.Scatter(y=media,x=cip))
+        tiemposfc.append(tiemposfp)
         fig.show()
         difdel.show()
-            #print(clienttransmits)
+    with open('data_extracted/'+carp+'.pkl','wb') as f:
+        pickle.dump(tiemposfc,f)
+    #difdel.add_trace(go.Scatter(medias))
+    #difdel.show()
+            
 
+def analizedata():
+    file=carpetas[5]
+    timeposfc=[]
+    with open('data_extracted/'+file+'.pkl','rb') as f:
+        timeposfc=pickle.load(f)
+    mastergrap=go.Figure()
+    meanc=[]
+    stdc=[]
+    for timeposfp in timeposfc:
+        difdel=go.Figure()
+        meanp=[]
+        stdp=[]
+        for timepos in timeposfp:
+            timedif2=[]
+            T_0s,T_1s=timepos
+            #print(len(T_1s))
+            for itime in range(len(T_1s)):
+                resta=T_0s[itime]-T_1s[itime]
+                if -100000<resta<100000:
+                    timedif2.append((T_0s[itime]-T_1s[itime]))
+
+            meanp.append(np.mean(timedif2))
+            stdp.append(np.std(timedif2))
+            difdel.add_trace(go.Scatter(x=np.linspace(0,10,len(timedif2)),y=timedif2))
+        meanc.append(meanp)
+        stdc.append(stdp)
+        #difdel.show()
+    means=np.array(meanc).T.tolist()
+    stds=np.array(stdc).T.tolist()
+    for idd,m in enumerate(means):
+        mastergrap.add_trace(go.Scatter(y=m,x=ciphersst,error_y=dict(
+            type='data', # value of error bar given in data coordinates
+            array=stds[idd],
+            visible=True)))
+    mastergrap.show()
 
 #platform=renode.renode()
 platform=sensortag.sensortag()
 #graphic_vel_cipher_sensortag(platform)
-extract_energy()
+analizedata()
+#extract_energy()
 #extract_times()
