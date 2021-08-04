@@ -33,6 +33,10 @@ packet=['1 Muestra','6 Muestras','9 Muestras']
 carpetas=['sensortagstdtesttable','sensortagstdtestconst','sensortag1s','escenariomultisalto','escenario1malla','escenariomultisalto2','escenario2malla2','escenariomultisalto30min']
 
 empaquetado=[1,6,9]
+
+def to_miliseconds(rtimerv):
+    return (rtimerv/platform.segundo)*1000
+
 def graphic_vel_cipher(platform):
     timetest=600
     timecrypt=[]
@@ -238,18 +242,24 @@ def extract_energy():
             #print(clienttransmits)
 
 def extract_times():
-    timetest=1800
-    carp=carpetas[7]
+    timetest=600
+    carp=carpetas[6]
     medias=[]
     jitters=[]
     graphtimes=go.Figure()
     tiemposfc=[]
-    for k,cip in enumerate(ciphersst[1:]):
+    tiemprosc=[]
+    tempdelayc=[]
+    presdelayc=[]
+    for k,cip in enumerate(ciphersst[:]):
         fig = go.Figure()
         difdel=go.Figure()
         media=[]
         jitter=[]
         tiemposfp=[]
+        tiemprosp=[]
+        tempdelayp=[]
+        presdelayp=[]
         #for pack in empaquetado:
         for iem,pack in enumerate(empaquetado[:]):
             times=go.Figure()
@@ -257,6 +267,8 @@ def extract_times():
             T_0ds=[]
             T_1s=[]
             tiempros=[]
+            tempdelay=[]
+            presdelay=[]
             with open('final_logs/'+carp+'/clientloguart_'+cip+'_'+str(pack)+'_'+str(timetest)+'.dat',"r", errors='ignore') as decv:
                     clientlines=decv.readlines()
             with open('final_logs/'+carp+'/oximloguart_'+cip+'_'+str(pack)+'_'+str(timetest)+'.dat',"r", errors='ignore') as decv:
@@ -304,9 +316,32 @@ def extract_times():
                             #     print(oximline,T_1s[-1])
                             break
             tiemposfp.append([T_0s,T_1s])        
-            
+            tiemprosc.append(tiempros)
             timedif1=[]
             timedif2=[]
+            for clientline in clientlines:
+                        clinea=clientline.split(',')
+                        if clinea[0]!='[INFO: CC26xx/CC13xx]  RF: Channel 26' and inicio2==False:
+                                continue
+                        inicio2=True
+                        if clinea[0].find('|t') !=-1:
+                            
+                            #print(clinea[3][:-2],clinea[3][:-1])
+                            try:
+                               tempdelay.append(int(clinea[2])-int(clinea[1]))
+                               print(clinea)
+                            except:
+                                pass
+                            break
+                        if clinea[0]=='|':
+                            #print(clinea[3][:-2],clinea[3][:-1])
+                            try:
+                               presdelay.append(int(clinea[2])-int(clinea[1]))
+                            except:
+                                pass
+                            break
+            tempdelayp.append(tempdelay)
+            presdelayp.append(presdelay)
             for itime in range(len(T_1s)-1):
                 timedif1.append((T_0s[itime]-T_0s[itime+1])-(T_1s[itime]-T_1s[itime+1]))
                 timedif2.append((T_0s[itime]-T_1s[itime]))
@@ -329,19 +364,31 @@ def extract_times():
    
         #difdel.add_trace(go.Scatter(y=media,x=cip))
         tiemposfc.append(tiemposfp)
-        fig.show()
-        difdel.show()
+        tiemprosc.append(tiemprosp)
+        tempdelayc.append(tempdelayp)
+        presdelayc.append(presdelayp)
+        #fig.show()
+        #difdel.show()
     with open('data_extracted/'+carp+'.pkl','wb') as f:
         pickle.dump(tiemposfc,f)
+    with open('data_extracted/'+carp+'pros.pkl','wb') as f:
+        pickle.dump(tiemprosc,f)
+    with open('data_extracted/'+carp+'temppress.pkl','wb') as f:
+        pickle.dump([tempdelayc,presdelayc],f)
     #difdel.add_trace(go.Scatter(medias))
     #difdel.show()
             
 
 def analizedata():
-    file=carpetas[5]
+    file=carpetas[6]
     timeposfc=[]
     with open('data_extracted/'+file+'.pkl','rb') as f:
         timeposfc=pickle.load(f)
+    with open('data_extracted/'+file+'pros.pkl','rb') as f:
+        tiemprosc=pickle.load(f)
+    with open('data_extracted/'+file+'temppress.pkl','rb') as f:
+        tempdelayc,presdelayc=pickle.load(f)
+    print(tempdelayc,presdelayc)
     mastergrap=go.Figure()
     mastergrapjitt=go.Figure()
     meanc=[]
@@ -351,11 +398,12 @@ def analizedata():
     for cidd,timeposfp in enumerate(timeposfc[:]):
         difdel=go.Figure()
         dif1grap=go.Figure()
+        tempgraph=go.Figure()
         meanp=[]
         stdp=[]
         meand1p=[]
         stdd1p=[]
-        for timepos in timeposfp:
+        for iddpos,timepos in enumerate(timeposfp):
             timedif2=[]
             timedif1=[]
             T_0s,T_1s=timepos
@@ -364,8 +412,10 @@ def analizedata():
                 resta=T_0s[itime]-T_1s[itime]
                 if -100000<resta<100000:
                     timedif2.append((T_0s[itime]-T_1s[itime]))
-                if abs((T_0s[itime]-T_0s[itime+1])-(T_1s[itime]-T_1s[itime+1]))<100000:
-                    timedif1.append(abs((T_0s[itime]-T_0s[itime+1])-(T_1s[itime]-T_1s[itime+1])))
+                #if abs((T_0s[itime]-T_0s[itime+1])-(T_1s[itime]-T_1s[itime+1]))<100000:
+                #    timedif1.append(abs((T_0s[itime]-T_0s[itime+1])-(T_1s[itime]-T_1s[itime+1])))
+                if abs((T_0s[itime+1]-T_1s[itime+1])-(T_0s[itime]-T_1s[itime]))<100000:
+                    timedif1.append(abs(to_miliseconds(T_0s[itime+1]-T_1s[itime+1])-(T_0s[itime]-T_1s[itime])/(len(T_0s)-1)))
             if min(timedif2)<0:
                 for i,dif2 in enumerate(timedif2):
                     timedif2[i]=dif2-min(timedif2)
@@ -376,6 +426,7 @@ def analizedata():
             stdd1p.append(np.std(timedif1))
             difdel.add_trace(go.Scatter(x=np.linspace(0,10,len(timedif2)),y=timedif2))
             dif1grap.add_trace(go.Scatter(x=np.linspace(0,10,len(timedif2)),y=timedif1))
+            tempgraph.add_trace(go.Scatter(x=np.linspace(0,10,len(tempdelayc[cidd][iddpos])),y=tempdelayc[cidd][iddpos]))
         meanc.append(meanp)
         stdc.append(stdp)
         meand1c.append(meand1p)
@@ -383,7 +434,9 @@ def analizedata():
         difdel.update_layout(title=ciphersst[cidd])
         #difdel.show()
         dif1grap.update_layout(title=ciphersst[cidd])
-        #dif1grap.show()
+        dif1grap.show()
+        tempgraph.update_layout(title=ciphersst[cidd])
+        tempgraph.show()
     means=np.array(meanc).T.tolist()
     #print(meanc)
     #print(means)
