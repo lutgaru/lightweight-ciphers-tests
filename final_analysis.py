@@ -29,7 +29,8 @@ from telnetlib import Telnet
 AES, GIFTCOFB, XOODYAK, ASCON128A, ASCON80, ASCON128, GRAIN128, TINYJAMBU192, TINYJAMBU256, TINYJAMBU128 = range(10)
 ciphers=['AES',' GIFTCOFB',' XOODYAK',' ASCON128A',' ASCON80',' ASCON128',' TINYJAMBU192',' TINYJAMBU256',' TINYJAMBU128']
 ciphersst=['AES',' GIFTCOFB',' XOODYAK',' TINYJAMBU192',' TINYJAMBU256',' TINYJAMBU128','NOCIP']
-carpetas=['sensortagstdtesttable','sensortagstdtestconst','sensortag1s','escenariomultisalto','escenario1malla','escenariomultisalto2']
+packet=['1 Muestra','6 Muestras','9 Muestras']
+carpetas=['sensortagstdtesttable','sensortagstdtestconst','sensortag1s','escenariomultisalto','escenario1malla','escenariomultisalto2','escenario2malla2','escenariomultisalto30min']
 
 empaquetado=[1,6,9]
 def graphic_vel_cipher(platform):
@@ -175,7 +176,7 @@ def extract_power(list):
 
 def extract_energy():
     timetest=600
-    carp=carpetas[5]
+    carp=carpetas[6]
     fig,axs=plt.subplots(1)
     for i,pack in enumerate(empaquetado):
             clientcpus=[]
@@ -237,20 +238,20 @@ def extract_energy():
             #print(clienttransmits)
 
 def extract_times():
-    timetest=600
-    carp=carpetas[5]
+    timetest=1800
+    carp=carpetas[7]
     medias=[]
     jitters=[]
     graphtimes=go.Figure()
     tiemposfc=[]
-    for k,cip in enumerate(ciphersst):
+    for k,cip in enumerate(ciphersst[1:]):
         fig = go.Figure()
         difdel=go.Figure()
         media=[]
         jitter=[]
         tiemposfp=[]
         #for pack in empaquetado:
-        for iem,pack in enumerate(empaquetado):
+        for iem,pack in enumerate(empaquetado[:]):
             times=go.Figure()
             T_0s=[]
             T_0ds=[]
@@ -262,11 +263,15 @@ def extract_times():
                     oximlines=decv.readlines()
             inicio=False
             #print(clientlines[0])
-            timeclient=datetime.strptime(clientlines[0],'TT,%m,%d,%y,%H,%M,%S,%f\n')
-            timeoxim=datetime.strptime(oximlines[0],'TT,%m,%d,%y,%H,%M,%S,%f\n')
-            delta=timeclient-timeoxim
-            deltartimer=((delta.total_seconds()*1000000)*platform.segundo)/1000000
-            print(delta.total_seconds()*1000000,deltartimer)
+            try:
+                timeclient=datetime.strptime(clientlines[0],'TT,%m,%d,%y,%H,%M,%S,%f\n')
+                timeoxim=datetime.strptime(oximlines[0],'TT,%m,%d,%y,%H,%M,%S,%f\n') 
+                delta=timeclient-timeoxim
+                deltartimer=((delta.total_seconds()*1000000)*platform.segundo)/1000000
+            except:
+                deltartimer=0
+            
+            #print(delta.total_seconds()*1000000,deltartimer)
             for oximline in oximlines:
                 linea=oximline.split(',')
                 if linea[0]!='[INFO: CC26xx/CC13xx]  RF: Channel 26' and inicio==False:
@@ -288,9 +293,12 @@ def extract_times():
                         if clinea[0]=='o' and clinea[2]==linea[1]:
                             
                             #print(clinea[3][:-2],clinea[3][:-1])
-                            T_0s.append(int(clinea[3]))
-                            T_0ds.append(int(clinea[3])-deltartimer)
-                            T_1s.append(int(tempT1))
+                            try:
+                                T_0s.append(int(clinea[3]))
+                                T_0ds.append(int(clinea[3])-deltartimer)
+                                T_1s.append(int(tempT1))
+                            except:
+                                pass
                             # if(T_0s[-1]<T_1s[-1]):
                             #     print(clinea,T_0s[-1])
                             #     print(oximline,T_1s[-1])
@@ -335,38 +343,67 @@ def analizedata():
     with open('data_extracted/'+file+'.pkl','rb') as f:
         timeposfc=pickle.load(f)
     mastergrap=go.Figure()
+    mastergrapjitt=go.Figure()
     meanc=[]
     stdc=[]
-    for timeposfp in timeposfc:
+    meand1c=[]
+    stdd1c=[]
+    for cidd,timeposfp in enumerate(timeposfc[:]):
         difdel=go.Figure()
+        dif1grap=go.Figure()
         meanp=[]
         stdp=[]
+        meand1p=[]
+        stdd1p=[]
         for timepos in timeposfp:
             timedif2=[]
+            timedif1=[]
             T_0s,T_1s=timepos
             #print(len(T_1s))
-            for itime in range(len(T_1s)):
+            for itime in range(len(T_1s)-1):
                 resta=T_0s[itime]-T_1s[itime]
                 if -100000<resta<100000:
                     timedif2.append((T_0s[itime]-T_1s[itime]))
-
+                if abs((T_0s[itime]-T_0s[itime+1])-(T_1s[itime]-T_1s[itime+1]))<100000:
+                    timedif1.append(abs((T_0s[itime]-T_0s[itime+1])-(T_1s[itime]-T_1s[itime+1])))
+            if min(timedif2)<0:
+                for i,dif2 in enumerate(timedif2):
+                    timedif2[i]=dif2-min(timedif2)
+                    
             meanp.append(np.mean(timedif2))
             stdp.append(np.std(timedif2))
+            meand1p.append(np.mean(timedif1))
+            stdd1p.append(np.std(timedif1))
             difdel.add_trace(go.Scatter(x=np.linspace(0,10,len(timedif2)),y=timedif2))
+            dif1grap.add_trace(go.Scatter(x=np.linspace(0,10,len(timedif2)),y=timedif1))
         meanc.append(meanp)
         stdc.append(stdp)
+        meand1c.append(meand1p)
+        stdd1c.append(stdd1p)
+        difdel.update_layout(title=ciphersst[cidd])
         #difdel.show()
+        dif1grap.update_layout(title=ciphersst[cidd])
+        #dif1grap.show()
     means=np.array(meanc).T.tolist()
+    #print(meanc)
+    #print(means)
     stds=np.array(stdc).T.tolist()
+    meansd1=np.array(meand1c).T.tolist()
+    stdsd1=np.array(stdd1c).T.tolist()
     for idd,m in enumerate(means):
-        mastergrap.add_trace(go.Scatter(y=m,x=ciphersst,error_y=dict(
+        mastergrap.add_trace(go.Scatter(y=m,x=ciphersst,name=packet[idd],error_y=dict(
             type='data', # value of error bar given in data coordinates
             array=stds[idd],
             visible=True)))
+        mastergrapjitt.add_trace(go.Scatter(y=meansd1[idd],x=ciphersst,name=packet[idd],error_y=dict(
+            type='data', # value of error bar given in data coordinates
+            array=stdsd1[idd],
+            visible=True)))
     mastergrap.show()
+    mastergrapjitt.show()
 
-#platform=renode.renode()
-platform=sensortag.sensortag()
+platform=renode.renode()
+#platform=sensortag.sensortag()
 #graphic_vel_cipher_sensortag(platform)
 analizedata()
 #extract_energy()
