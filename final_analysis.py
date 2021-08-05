@@ -180,7 +180,7 @@ def extract_power(list):
 
 def extract_energy():
     timetest=600
-    carp=carpetas[6]
+    carp=carpetas[5]
     fig,axs=plt.subplots(1)
     for i,pack in enumerate(empaquetado):
             clientcpus=[]
@@ -243,7 +243,7 @@ def extract_energy():
 
 def extract_times():
     timetest=600
-    carp=carpetas[6]
+    carp=carpetas[5]
     medias=[]
     jitters=[]
     graphtimes=go.Figure()
@@ -293,7 +293,10 @@ def extract_times():
                 if linea[0]=='o':
                     tempT1=linea[2]
                     try:
-                        tiempros.append(int(linea[5])-int(linea[2]))
+                        if len(linea)<5:
+                            tiempros.append(int(linea[3])-int(linea[2]))
+                        else:
+                            tiempros.append(int(linea[5])-int(linea[2]))
                     except:
                         pass
                     inicio2=False
@@ -316,7 +319,7 @@ def extract_times():
                             #     print(oximline,T_1s[-1])
                             break
             tiemposfp.append([T_0s,T_1s])        
-            tiemprosc.append(tiempros)
+            tiemprosp.append(tiempros)
             timedif1=[]
             timedif2=[]
             for clientline in clientlines:
@@ -327,26 +330,28 @@ def extract_times():
                         if clinea[0].find('|t') !=-1:
                             
                             #print(clinea[3][:-2],clinea[3][:-1])
+                            print(clinea)
                             try:
                                tempdelay.append(int(clinea[2])-int(clinea[1]))
                                print(clinea)
                             except:
                                 pass
-                            break
+                            #break
                         if clinea[0]=='|':
                             #print(clinea[3][:-2],clinea[3][:-1])
+                            print(clinea)
                             try:
                                presdelay.append(int(clinea[2])-int(clinea[1]))
                             except:
                                 pass
-                            break
+                            #break
             tempdelayp.append(tempdelay)
             presdelayp.append(presdelay)
             for itime in range(len(T_1s)-1):
                 timedif1.append((T_0s[itime]-T_0s[itime+1])-(T_1s[itime]-T_1s[itime+1]))
                 timedif2.append((T_0s[itime]-T_1s[itime]))
                 #timedif.append(T_0s[itime]-T_0s[itime+1])
-            print(T_1s)
+            #print(T_1s)
             #axs.plot(timedif1)
             times.add_trace(go.Scatter(x=np.linspace(0,10,len(T_1s)),y=T_1s))
             times.add_trace(go.Scatter(x=np.linspace(0,10,len(T_0s)),y=T_0s))
@@ -360,7 +365,7 @@ def extract_times():
             #axs.plot(timedif1)
             #times.show()
 
-            print(T_0s)
+            #print(T_0s)
    
         #difdel.add_trace(go.Scatter(y=media,x=cip))
         tiemposfc.append(tiemposfp)
@@ -380,7 +385,7 @@ def extract_times():
             
 
 def analizedata():
-    file=carpetas[6]
+    file=carpetas[5]
     timeposfc=[]
     with open('data_extracted/'+file+'.pkl','rb') as f:
         timeposfc=pickle.load(f)
@@ -388,21 +393,33 @@ def analizedata():
         tiemprosc=pickle.load(f)
     with open('data_extracted/'+file+'temppress.pkl','rb') as f:
         tempdelayc,presdelayc=pickle.load(f)
-    print(tempdelayc,presdelayc)
+    #print(tempdelayc,presdelayc)
+    #print(tiemprosc)
     mastergrap=go.Figure()
     mastergrapjitt=go.Figure()
+    mastergraptemp=go.Figure()
+    mastergrappros=go.Figure()
     meanc=[]
     stdc=[]
     meand1c=[]
     stdd1c=[]
+    meantc=[]
+    stdtc=[]
+    meanprc=[]
+    stdprc=[]
     for cidd,timeposfp in enumerate(timeposfc[:]):
         difdel=go.Figure()
         dif1grap=go.Figure()
         tempgraph=go.Figure()
+        prosgraph=go.Figure()
         meanp=[]
         stdp=[]
         meand1p=[]
         stdd1p=[]
+        meantp=[]
+        stdtp=[]
+        meanprp=[]
+        stdprp=[]
         for iddpos,timepos in enumerate(timeposfp):
             timedif2=[]
             timedif1=[]
@@ -411,7 +428,7 @@ def analizedata():
             for itime in range(len(T_1s)-1):
                 resta=T_0s[itime]-T_1s[itime]
                 if -100000<resta<100000:
-                    timedif2.append((T_0s[itime]-T_1s[itime]))
+                    timedif2.append(to_miliseconds(T_0s[itime]-T_1s[itime]))
                 #if abs((T_0s[itime]-T_0s[itime+1])-(T_1s[itime]-T_1s[itime+1]))<100000:
                 #    timedif1.append(abs((T_0s[itime]-T_0s[itime+1])-(T_1s[itime]-T_1s[itime+1])))
                 if abs((T_0s[itime+1]-T_1s[itime+1])-(T_0s[itime]-T_1s[itime]))<100000:
@@ -426,34 +443,62 @@ def analizedata():
             stdd1p.append(np.std(timedif1))
             difdel.add_trace(go.Scatter(x=np.linspace(0,10,len(timedif2)),y=timedif2))
             dif1grap.add_trace(go.Scatter(x=np.linspace(0,10,len(timedif2)),y=timedif1))
-            tempgraph.add_trace(go.Scatter(x=np.linspace(0,10,len(tempdelayc[cidd][iddpos])),y=tempdelayc[cidd][iddpos]))
+            #print(tiemprosc[cidd])
+            prosgraph.add_trace(go.Scatter(x=np.linspace(0,10,len(tiemprosc[cidd][iddpos])),y=tiemprosc[cidd][iddpos]))
+            tempgraph.add_trace(go.Scatter(x=np.linspace(0,10,len([z for z in tempdelayc[cidd][iddpos] if z<20000])),y=[z for z in tempdelayc[cidd][iddpos] if z<20000]))
+            meantp.append(to_miliseconds(np.mean([z for z in tempdelayc[cidd][iddpos] if z<20000])))
+            stdtp.append(to_miliseconds(np.std([z for z in tempdelayc[cidd][iddpos] if z<10000])))
+            meanprp.append(to_miliseconds(np.mean([z for z in tiemprosc[cidd][iddpos] if -2000<z<2000])))
+            stdprp.append(to_miliseconds(np.std([z for z in tiemprosc[cidd][iddpos] if -2000<z<2000])))
         meanc.append(meanp)
         stdc.append(stdp)
+        meantc.append(meantp)
+        stdtc.append(stdtp)
         meand1c.append(meand1p)
         stdd1c.append(stdd1p)
+        meanprc.append(meanprp)
+        stdprc.append(stdprp)
         difdel.update_layout(title=ciphersst[cidd])
         #difdel.show()
         dif1grap.update_layout(title=ciphersst[cidd])
-        dif1grap.show()
+        #dif1grap.show()
         tempgraph.update_layout(title=ciphersst[cidd])
-        tempgraph.show()
+        #prosgraph.show()
+        #tempgraph.show()
     means=np.array(meanc).T.tolist()
     #print(meanc)
     #print(means)
     stds=np.array(stdc).T.tolist()
     meansd1=np.array(meand1c).T.tolist()
     stdsd1=np.array(stdd1c).T.tolist()
+    meanst=np.array(meantc).T.tolist()
+    stdst=np.array(stdtc).T.tolist()
+    meanspr=np.array(meanprc).T.tolist()
+    stdspr=np.array(stdprc).T.tolist()
     for idd,m in enumerate(means):
-        mastergrap.add_trace(go.Scatter(y=m,x=ciphersst,name=packet[idd],error_y=dict(
+        mastergrap.add_trace(go.Bar(y=m,x=ciphersst,name=packet[idd],error_y=dict(
             type='data', # value of error bar given in data coordinates
             array=stds[idd],
             visible=True)))
-        mastergrapjitt.add_trace(go.Scatter(y=meansd1[idd],x=ciphersst,name=packet[idd],error_y=dict(
+        mastergrapjitt.add_trace(go.Bar(y=meansd1[idd],x=ciphersst,name=packet[idd],error_y=dict(
             type='data', # value of error bar given in data coordinates
             array=stdsd1[idd],
             visible=True)))
+        mastergraptemp.add_trace(go.Bar(y=meanst[idd],x=ciphersst,name=packet[idd],error_y=dict(
+            type='data', # value of error bar given in data coordinates
+            array=stdst[idd],
+            visible=True)))
+        mastergrappros.add_trace(go.Bar(y=meanspr[idd],x=ciphersst,name=packet[idd],error_y=dict(
+            type='data', # value of error bar given in data coordinates
+            array=stdspr[idd],
+            visible=True)))
+    mastergrap.update_layout(title='End to end delay estimado',yaxis_title="ms",)
     mastergrap.show()
+    mastergrapjitt.update_layout(title='Jitter promedio',yaxis_title="ms",)
     mastergrapjitt.show()
+    mastergraptemp.update_layout(title='End to end delay solicitud-respuesta',yaxis_title="ms",)
+    mastergraptemp.show()
+    mastergrappros.show()
 
 platform=renode.renode()
 #platform=sensortag.sensortag()
