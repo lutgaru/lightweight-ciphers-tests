@@ -13,6 +13,7 @@ import random
 import csv
 
 from numpy.core.fromnumeric import mean, std
+import plotly
 import sensortag
 import renode
 import cooja
@@ -171,17 +172,20 @@ def graphic_vel_cipher_sensortag(platform):
     #axs.set_title("Velcidad de cifrado y decifrado")
     plt.show()          
 
-def extract_power(list):
+def extract_power(list,list2):
     times=[]
     for i in range(len(list)-1):
-        times.append(int(list[i+1])-int(list[i]))
+        pwr=(((6.1*10**-3)*3.3)*((int(list[i+1])-int(list[i]))/1000))
+        pwt=(((6.1*10**-3)*3.3)*((int(list2[i+1])-int(list2[i]))/1000))
+        times.append(pwr+pwt)
     #print(times,list)
     return times
 
 def extract_energy():
     timetest=600
-    carp=carpetas[5]
+    carp=carpetas[6]
     fig,axs=plt.subplots(1)
+    grapenergy=make_subplots(rows=4, cols=1,subplot_titles=['Cliente','Oxímetro','Termómetro','Baumanómetro'])
     for i,pack in enumerate(empaquetado):
             clientcpus=[]
             clientlpms=[]
@@ -190,6 +194,12 @@ def extract_energy():
             clientlistens=[]
             clienttransmits=[]
             clientrtotals=[]
+            oximlistens=[]
+            oximtransmits=[]
+            templistens=[]
+            temptransmits=[]
+            presslistens=[]
+            presstransmits=[]
             #for pack in empaquetado:
             for k,cip in enumerate(ciphersst):
                 clientcpu=[]
@@ -198,11 +208,21 @@ def extract_energy():
                 clienttotalcpu=[]
                 clientlisten=[]
                 clienttransmit=[]
+                oximlisten=[]
+                oximtransmit=[]
                 clientrtotal=[]
+                templisten=[]
+                temptransmit=[]
+                presslisten=[]
+                presstransmit=[]
                 with open('final_logs/'+carp+'/clientloguart_'+cip+'_'+str(pack)+'_'+str(timetest)+'.dat',"r", errors='ignore') as decv:
                      clientlines=decv.readlines()
-                with open('final_logs/'+carp+'/clientloguart_'+cip+'_'+str(pack)+'_'+str(timetest)+'.dat',"r", errors='ignore') as decv:
+                with open('final_logs/'+carp+'/oximloguart_'+cip+'_'+str(pack)+'_'+str(timetest)+'.dat',"r", errors='ignore') as decv:
                      oximlines=decv.readlines()
+                with open('final_logs/'+carp+'/temploguart_'+cip+'_'+str(pack)+'_'+str(timetest)+'.dat',"r", errors='ignore') as decv:
+                     templines=decv.readlines()
+                with open('final_logs/'+carp+'/presloguart_'+cip+'_'+str(pack)+'_'+str(timetest)+'.dat',"r", errors='ignore') as decv:
+                     presslines=decv.readlines()
                 inicio=False
                 for clientline in clientlines:
                     linea=clientline.split(',')
@@ -220,6 +240,37 @@ def extract_energy():
                         clientlisten.append(int(linea[1]))
                         clienttransmit.append(int(linea[2]))
                         clientrtotal.append(int(linea[3]))
+                inicio=False
+                for oximline in oximlines:
+                    linea=oximline.split(',')
+                    if linea[0]!='[INFO: CC26xx/CC13xx]  RF: Channel 26' and inicio==False:
+                            #print(linesp)
+                            continue
+                    inicio=True 
+                    if linea[0]=='ER':
+                        oximlisten.append(int(linea[1]))
+                        oximtransmit.append(int(linea[2]))
+                inicio=False
+                for pressline in presslines:
+                    linea=pressline.split(',')
+                    if linea[0]!='[INFO: CC26xx/CC13xx]  RF: Channel 26' and inicio==False:
+                            #print(linesp)
+                            continue
+                    inicio=True 
+                    if linea[0]=='ER':
+                        presslisten.append(int(linea[1]))
+                        presstransmit.append(int(linea[2]))
+                inicio=False
+                for templine in templines:
+                    linea=templine.split(',')
+                    if linea[0]!='[INFO: CC26xx/CC13xx]  RF: Channel 26' and inicio==False:
+                            #print(linesp)
+                            continue
+                    inicio=True 
+                    if linea[0]=='ER':
+                        templisten.append(int(linea[1]))
+                        temptransmit.append(int(linea[2]))
+                        #clientrtotal.append(int(linea[3]))
                         #print(linea)
                 #print(clientlpm)
                 clientcpus.append(clientcpu)
@@ -229,21 +280,50 @@ def extract_energy():
                 clientlistens.append(clientlisten)
                 clienttransmits.append(clienttransmit)
                 clientrtotals.append(clientrtotal)
+                oximlistens.append(oximlisten)
+                oximtransmits.append(oximtransmit)
+                templistens.append(templisten)
+                temptransmits.append(temptransmit)
+                presslistens.append(presslisten)
+                presstransmits.append(presstransmit)
                 #print(clienttotalcpu)
-            print([np.std(extract_power(x)) for x in clienttotalcpus])
-            axs.errorbar(ciphersst,[np.mean(extract_power(x)) for x in clientlistens],yerr=[np.std(extract_power(x)) for x in clientlistens],fmt='v:',label=str(pack)+" listen", capsize=3, capthick=1)
+            #print([np.std(extract_power(x)) for x in clienttotalcpus])
+            #axs.errorbar(ciphersst,[np.mean(extract_power(x)) for x in clientlistens],yerr=[np.std(extract_power(x)) for x in clientlistens],fmt='v:',label=str(pack)+" listen", capsize=3, capthick=1)
             #axs.errorbar(np.linspace(0,10,len(clientlistens[0])),clientlistens[0],fmt='v:',label=str(pack)+" listen", capsize=3, capthick=1)
-            #axs.errorbar(ciphersst,[np.mean(extract_power(x)) for x in clienttotalcpus],yerr=[np.std(extract_power(x)) for x in clienttotalcpus],fmt='*:',label=str(pack)+" totalcpu", capsize=3, capthick=1)
-            axs.errorbar(ciphersst,[np.mean(extract_power(x)) for x in clienttransmits],yerr=[np.std(extract_power(x)) for x in clienttransmits],fmt='.:',label=str(pack)+" transmit", capsize=3, capthick=1)
+            #axs.errorbar(ciphersst,[np.mean(extract_power(clientlistens[idd],clienttransmits[idd])) for idd,x in enumerate(clienttotalcpus)],yerr=[np.std(extract_power(x)) for x in clienttotalcpus],fmt='*:',label=str(pack)+" totalcpu", capsize=3, capthick=1)
+            #axs.errorbar(ciphersst,[np.mean(extract_power(x)) for x in clienttransmits],yerr=[np.std(extract_power(x)) for x in clienttransmits],fmt='.:',label=str(pack)+" transmit", capsize=3, capthick=1)
+            #print(oximtransmits)
+            grapenergy.add_trace(go.Bar(y=[np.mean(extract_power(clientlistens[idd],clienttransmits[idd])) for idd,x in enumerate(clienttotalcpus)],x=ciphersst,name=packet[i],marker_color=plotly.colors.qualitative.Plotly[i],error_y=dict(
+            type='data', # value of error bar given in data coordinates
+            array=[np.std(extract_power(clientlistens[idd],clienttransmits[idd])) for idd,x in enumerate(clienttotalcpus)],
+            visible=True),),1,1)
+            grapenergy.add_trace(go.Bar(y=[np.mean(extract_power(oximlistens[idd],oximtransmits[idd])) for idd,x in enumerate(oximtransmits)],x=ciphersst,name=packet[i],marker_color=plotly.colors.qualitative.Plotly[i],error_y=dict(
+            type='data', # value of error bar given in data coordinates
+            array=[np.std(extract_power(oximlistens[idd],oximtransmits[idd])) for idd,x in enumerate(oximtransmits)],
+            visible=True),showlegend=False),2,1)
+            grapenergy.add_trace(go.Bar(y=[np.mean(extract_power(presslistens[idd],presstransmits[idd])) for idd,x in enumerate(presstransmits)],x=ciphersst,name=packet[i],marker_color=plotly.colors.qualitative.Plotly[i],error_y=dict(
+            type='data', # value of error bar given in data coordinates
+            array=[np.std(extract_power(presslistens[idd],presstransmits[idd])) for idd,x in enumerate(presstransmits)],
+            visible=True),showlegend=False),3,1)
+            grapenergy.add_trace(go.Bar(y=[np.mean(extract_power(templistens[idd],temptransmits[idd])) for idd,x in enumerate(temptransmits)],x=ciphersst,name=packet[i],marker_color=plotly.colors.qualitative.Plotly[i],error_y=dict(
+            type='data', # value of error bar given in data coordinates
+            array=[np.std(extract_power(templistens[idd],temptransmits[idd])) for idd,x in enumerate(temptransmits)],
+            visible=True),showlegend=False),4,1)
             #axs.errorbar(ciphersst,[np.mean(extract_power(x)) for x in clientrtotals],yerr=[np.std(extract_power(x)) for x in clientrtotals],fmt='v:',label=str(pack)+" rtotals", capsize=3, capthick=1)
             #exit()
     plt.legend()
-    plt.show()
+    grapenergy.update_yaxes(title_text="Watts",range=[0.02012,0.02016],row=1,col=1)
+    grapenergy.update_yaxes(title_text="Watts",range=[0.02012,0.02016],row=2,col=1)
+    grapenergy.update_yaxes(title_text="Watts",range=[0.02012,0.02016],row=3,col=1)
+    grapenergy.update_yaxes(title_text="Watts",range=[0.02012,0.02016],row=4,col=1)
+    grapenergy.show()
+    grapenergy.write_image("/home/arts1/Documents/graficasalv/"+"powercons"+carp+".pdf",width=1000,height=720)
+    #plt.show()
             #print(clienttransmits)
 
 def extract_times():
     timetest=600
-    carp=carpetas[5]
+    carp=carpetas[6]
     medias=[]
     jitters=[]
     graphtimes=go.Figure()
@@ -385,7 +465,7 @@ def extract_times():
             
 
 def analizedata():
-    file=carpetas[5]
+    file=carpetas[6]
     timeposfc=[]
     with open('data_extracted/'+file+'.pkl','rb') as f:
         timeposfc=pickle.load(f)
@@ -492,17 +572,22 @@ def analizedata():
             type='data', # value of error bar given in data coordinates
             array=stdspr[idd],
             visible=True)))
-    mastergrap.update_layout(title='End to end delay estimado',yaxis_title="ms",)
+    mastergrap.update_layout(yaxis_title="ms",)
     mastergrap.show()
-    mastergrapjitt.update_layout(title='Jitter promedio',yaxis_title="ms",)
+    #mastergrap.write_image("/home/arts1/Documents/graficasalv/"+"Endtoenddelayestimado"+file+".pdf",width=1000,height=720)
+    mastergrapjitt.update_layout(yaxis_title="ms",)
     mastergrapjitt.show()
-    mastergraptemp.update_layout(title='End to end delay solicitud-respuesta',yaxis_title="ms",)
+    #mastergrapjitt.write_image("/home/arts1/Documents/graficasalv/"+"Jitterpromedio"+file+".pdf",width=1000,height=720)
+    mastergraptemp.update_layout(yaxis_title="ms",)
     mastergraptemp.show()
+    #mastergraptemp.write_image("/home/arts1/Documents/graficasalv/"+"latenciasolicitud-respuesta"+file+".pdf",width=1000,height=720)
+    mastergrappros.update_layout(yaxis_title="ms",)
     mastergrappros.show()
+    mastergrappros.write_image("/home/arts1/Documents/graficasalv/"+"proccesstime"+file+".pdf",width=1000,height=720)
 
 platform=renode.renode()
 #platform=sensortag.sensortag()
 #graphic_vel_cipher_sensortag(platform)
-analizedata()
-#extract_energy()
+#analizedata()
+extract_energy()
 #extract_times()
