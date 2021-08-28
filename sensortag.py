@@ -1,3 +1,4 @@
+from datetime import datetime
 import os
 from telnetlib import Telnet
 import subprocess
@@ -21,6 +22,11 @@ class sensortag:
         print(command)
         return os.system(command)
 
+    def puertouart(self,port):
+        puerto=os.popen('readlink -f '+port).read()
+        numero=int(puerto[puerto.find('ACM')+3:])-1
+        return puerto[:puerto.find('ACM')+3]+str(numero)
+
     def threaduart(self,port,file,timeout,reset):
         ser = serial.Serial(port, 115200,timeout=0.2)
         dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -30,6 +36,7 @@ class sensortag:
         ser.flushInput()
         time.sleep(0.2)
         os.system(reset)
+        f.write((datetime.now().strftime('TT,%m,%d,%y,%H,%M,%S,%f')+'\n').encode('ascii'))
         print(ttimeout,time.time())
         while ser.is_open:
             data=ser.read(size=ser.in_waiting)
@@ -43,26 +50,49 @@ class sensortag:
         f.close()
         ser.close()
     
-    def run(self,program=1,local=1,sleep=300):
+    def run(self,program=1,local=1,sleep=300,nodes='oxim'):
         if local:
             dir_path = os.path.dirname(os.path.realpath(__file__))
             os.chdir(dir_path)
             if(program):
-                exito1=os.system("/opt/ti/uniflash/dslite.sh -c cliente.ccxml -f contiki-ng/examples/coap_cipher_vel_test_final/coap-example-client/build/cc26x0-cc13x0/sensortag/cc2650/coap-example-client.hex")
-                exito2=os.system("/opt/ti/uniflash/dslite.sh -c server.ccxml -f contiki-ng/examples/coap_cipher_vel_test_final/coap-example-server/build/cc26x0-cc13x0/sensortag/cc2650/coap-example-server.hex")
+                
+                exito1=os.system("/opt/ti/uniflash/dslite.sh -c Cliente.ccxml -f executable/cc2650/cliente/coap-example-client.hex")
+                if nodes.find('oxim')!=-1:
+                    exito2=os.system("/opt/ti/uniflash/dslite.sh -c oximetro.ccxml -f executable/cc2650/oximetro/coap-example-server.hex")
+                if nodes.find('temp')!=-1:
+                    exito2=os.system("/opt/ti/uniflash/dslite.sh -c Termometro.ccxml -f executable/cc2650/termometro/coap-example-server.hex")
+                if nodes.find('pres')!=-1:
+                    exito2=os.system("/opt/ti/uniflash/dslite.sh -c presion.ccxml -f executable/cc2650/esfingo/coap-example-server.hex")
+                
                 if (exito1!=0 or exito2!=0):
                     return -1
             time.sleep(0.2)
-            resc="/opt/ti/uniflash/dslite.sh -c cliente.ccxml --post-flash-device-cmd PinReset"
-            ress="/opt/ti/uniflash/dslite.sh -c server.ccxml --post-flash-device-cmd PinReset"
-            clientthread=threading.Thread(target=self.threaduart,args=("/dev/ttyACM0","clientloguart.dat",300,resc,))#,daemon=True)
-            serverthread=threading.Thread(target=self.threaduart,args=("/dev/ttyACM2","serverloguart.dat",300,ress,))#,daemon=True)
+            resc="/opt/ti/uniflash/dslite.sh -c Cliente.ccxml --post-flash-device-cmd PinReset"
+            clientthread=threading.Thread(target=self.threaduart,args=(self.puertouart("/dev/ttyCLIENTE"),"clientloguart.dat",sleep,resc,))
+            if nodes.find('oxim')!=-1:
+                ress="/opt/ti/uniflash/dslite.sh -c oximetro.ccxml --post-flash-device-cmd PinReset"
+                oxithread=threading.Thread(target=self.threaduart,args=(self.puertouart("/dev/ttyOXIMETRO"),"oximloguart.dat",sleep,ress,))
+            if nodes.find('temp')!=-1:
+                ress="/opt/ti/uniflash/dslite.sh -c Termometro.ccxml --post-flash-device-cmd PinReset"
+                tempthread=threading.Thread(target=self.threaduart,args=(self.puertouart("/dev/ttyTERMOMETRO"),"temploguart.dat",sleep,ress,))
+            if nodes.find('pres')!=-1:
+                ress="/opt/ti/uniflash/dslite.sh -c presion.ccxml --post-flash-device-cmd PinReset"
+                presthread=threading.Thread(target=self.threaduart,args=(self.puertouart("/dev/ttyPRESION"),"presloguart.dat",sleep,ress,))
+            #return
+           
             print("= "*80)
+            
+            if nodes.find('oxim')!=-1:
+                oxithread.start()
+            if nodes.find('temp')!=-1:
+                tempthread.start()
+            if nodes.find('pres')!=-1:
+                presthread.start()
             clientthread.start()
-            serverthread.start()
+            
             print("Esperando")
             time.sleep(0.2)
-            while serverthread.is_alive() or clientthread.is_alive():
+            while clientthread.is_alive():
                 pass
             pass
         else:
