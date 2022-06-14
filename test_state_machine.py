@@ -3,27 +3,19 @@ import os
 import subprocess
 from sys import platform
 import matplotlib
+import renode
 import matplotlib.pyplot as plt
 import numpy as np
 from telnetlib import Telnet
 import time
 from datetime import datetime
 #import matplotlib.colors as colors
-import random
-import csv
-import sensortag
-import renode
-import cooja
-import test_multihop_multiclient
 import matplotlib.pyplot as plt
-import plotly.express as px
-import plotly.graph_objects as go
-from plotly.subplots import make_subplots
 import csv
 import numpy as np
 from telnetlib import Telnet
 
-carpeta='multisalto30min2'
+carpeta='multisalto4'
 AES, GIFTCOFB, XOODYAK, ASCON128A, ASCON80, ASCON128, GRAIN128, TINYJAMBU192, TINYJAMBU256, TINYJAMBU128, NOCIPHER = range(11)
 ciphers=['AES',' GIFTCOFB',' XOODYAK',' ASCON128A',' ASCON80',' ASCON128',' GRAIN128',' TINYJAMBU192',' TINYJAMBU256',' TINYJAMBU128','NOCIP']
 
@@ -82,10 +74,10 @@ def final_test_1nodo(platform,nodes='oxim'):
     dir_path = os.path.dirname(os.path.realpath(__file__))
     lencu=0
     timetest=1800
-    for cip in range(0,11):
+    for cip in range(1):
         if cip==6 or cip==5 or cip==3 or cip==4:
             continue
-        for pack in [1,6,9]:
+        for pack in [8]:
             #pack=9
             print(50*'=')
             print('cipher:',ciphers[cip],"pack:",str(pack))
@@ -95,60 +87,36 @@ def final_test_1nodo(platform,nodes='oxim'):
             #nbytes=0
             compileimage(cip,platform,args=' NMUESTRAS='+str(pack)+ ' TIPO=1 ')
             os.chdir(dir_path)
-            os.system('cp contiki-ng/examples/coap_cipher_vel_test_final/coap-example-client/build/cc26x0-cc13x0/sensortag/cc2650/coap-example-client.hex executable/cc2650/cliente')
+            os.system('cp contiki-ng/examples/coap_cipher_vel_test_final/coap-example-client/build/cc2538dk/coap-example-client.cc2538dk executable/cc2538/cliente')
             if nodes.find('oxim')!=-1:
                 os.chdir(dir_path+"/contiki-ng/examples/coap_cipher_vel_test_final/coap-example-server")
                 compileimage(cip,platform,args=' NMUESTRAS='+str(pack)+ ' TIPO=1 ')
                 os.chdir(dir_path)
-                os.system('cp contiki-ng/examples/coap_cipher_vel_test_final/coap-example-server/build/cc26x0-cc13x0/sensortag/cc2650/coap-example-server.hex executable/cc2650/oximetro')
+                os.system('cp contiki-ng/examples/coap_cipher_vel_test_final/coap-example-server/build/cc2538dk/coap-example-server.cc2538dk executable/cc2538/oximetro')
             if nodes.find('temp')!=-1:
                 os.chdir(dir_path+"/contiki-ng/examples/coap_cipher_vel_test_final/coap-example-server")
                 compileimage(cip,platform,args=' NMUESTRAS='+str(pack)+ ' TIPO=2 ')
                 os.chdir(dir_path)
-                os.system('cp contiki-ng/examples/coap_cipher_vel_test_final/coap-example-server/build/cc26x0-cc13x0/sensortag/cc2650/coap-example-server.hex executable/cc2650/termometro')
+                os.system('cp contiki-ng/examples/coap_cipher_vel_test_final/coap-example-server/build/cc2538dk/coap-example-server.cc2538dk executable/cc2538/termometro')
             if nodes.find('pres')!=-1:
                 os.chdir(dir_path+"/contiki-ng/examples/coap_cipher_vel_test_final/coap-example-server")
                 compileimage(cip,platform,args=' NMUESTRAS='+str(pack)+ ' TIPO=3 ')
                 os.chdir(dir_path)
-                os.system('cp contiki-ng/examples/coap_cipher_vel_test_final/coap-example-server/build/cc26x0-cc13x0/sensortag/cc2650/coap-example-server.hex executable/cc2650/esfingo')
+                os.system('cp contiki-ng/examples/coap_cipher_vel_test_final/coap-example-server/build/cc2538dk/coap-example-server.cc2538dk executable/cc2538/esfingo')
             #
             #os.system('echo linux | sudo -S /home/arts1/lightweight-ciphers-tests/reconect.sh')
             #time.sleep(2)
             #
-            platform.run(sleep=timetest,nodes=nodes)
+            os.system("renode coap_test_3_saltos_final.resc")
             #return
-            if(platform.nombre=='renode'):
-                os.chdir(dir_path)
-                os.system('cp clientloguart.dat final_logs/renode')
-                os.rename(r'final_logs/renode/clientloguart.dat',r'final_logs/renode/clientloguart_'+ciphers[cip]+'_'+str(pack)+'_'+str(timetest)+'.dat')
-                os.remove('clientloguart.dat')
-                os.system('cp serverloguart.dat final_logs/renode')
-                os.rename(r'final_logs/renode/serverloguart.dat',r'final_logs/renode/serverloguart_'+ciphers[cip]+'_'+str(pack)+'_'+str(timetest)+'.dat')
-                os.remove('serverloguart.dat')
-            if(platform.nombre=='sensortag'):
-                os.chdir(dir_path)
-                os.system('cp clientloguart.dat final_logs/'+carpeta)
-                os.rename(r'final_logs/'+carpeta+'/clientloguart.dat',r'final_logs/'+carpeta+'/clientloguart_'+ciphers[cip]+'_'+str(pack)+'_'+str(timetest)+'.dat')
-                os.remove('clientloguart.dat')
-                if nodes.find('oxim')!=-1:
-                    os.system('cp oximloguart.dat final_logs/'+carpeta)
-                    os.rename(r'final_logs/'+carpeta+'/oximloguart.dat',r'final_logs/'+carpeta+'/oximloguart_'+ciphers[cip]+'_'+str(pack)+'_'+str(timetest)+'.dat')
-                    os.remove('oximloguart.dat')
-                if nodes.find('temp')!=-1:
-                    os.system('cp temploguart.dat final_logs/'+carpeta)
-                    os.rename(r'final_logs/'+carpeta+'/temploguart.dat',r'final_logs/'+carpeta+'/temploguart_'+ciphers[cip]+'_'+str(pack)+'_'+str(timetest)+'.dat')
-                    os.remove('temploguart.dat')
-                if nodes.find('pres')!=-1:
-                    os.system('cp presloguart.dat final_logs/'+carpeta)
-                    os.rename(r'final_logs/'+carpeta+'/presloguart.dat',r'final_logs/'+carpeta+'/presloguart_'+ciphers[cip]+'_'+str(pack)+'_'+str(timetest)+'.dat')
-                    os.remove('presloguart.dat')
+            
 
 
 
 
 
-#platform=renode.renode()
-platform=sensortag.sensortag()
+platform=renode.renode()
+
 #unit_test(platform,9)
 
 final_test_1nodo(platform,nodes='oxim-temp-pres')

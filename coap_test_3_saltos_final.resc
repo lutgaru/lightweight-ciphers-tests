@@ -15,7 +15,7 @@
 ######################################################################
 
 #path add $CWD
-emulation CreateWirelessMedium "wireless"
+emulation CreateIEEE802_15_4Medium "wireless"
 #$domain = `emulation AddSyncDomain`
 #wireless SetSyncDomainFromEmulation $domain
 #wireless SetRangeWirelessFunction 11
@@ -78,6 +78,8 @@ showAnalyzer sysbus.uart0
 #machine StartGdbServer 3333
 mach clear
 ########################## UDP CLIENT - end ##########################
+emulation LogIEEE802_15_4Traffic
 emulation SetGlobalAdvanceImmediately True
-emulation SetGlobalQuantum "0.00005"
+emulation SetGlobalQuantum "0.00003"
+
 start

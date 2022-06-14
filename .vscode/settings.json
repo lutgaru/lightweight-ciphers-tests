@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "testglobal.h": "c",
+        "*.ipp": "c",
+        "thread": "c"
+    }
+}
